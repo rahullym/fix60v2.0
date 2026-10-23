@@ -1,1 +1,439 @@
-{}
+{
+  "common": {
+    "loading": "Loading…",
+    "optional": "optional"
+  },
+  "gate": {
+    "loading": "Loading your provider account…"
+  },
+  "suspended": {
+    "title": "Your account is paused",
+    "body": "You can't receive or accept jobs right now.",
+    "notice": "Our team has suspended this provider account. Contact support to understand why and what you can do next.",
+    "contact": "Contact support"
+  },
+  "tabs": {
+    "jobs": "Jobs",
+    "jobsA11y_one": "Jobs, {{count}} new invitation",
+    "jobsA11y_other": "Jobs, {{count}} new invitations",
+    "bookings": "Bookings",
+    "availability": "Availability",
+    "profile": "Profile"
+  },
+  "stats": {
+    "pendingInvitations": "New jobs",
+    "upcomingBookings": "Upcoming",
+    "completedBookings": "Completed"
+  },
+  "application": {
+    "title": "Your application",
+    "loading": "Loading your application…",
+    "code": "Application number",
+    "progress": "{{done}} of {{total}} steps done",
+    "submittedAt": "Submitted on {{date}}",
+    "start": "Start application",
+    "continueTo": "Continue: step {{number}}, {{title}}",
+    "draftIntro": "Complete all 9 steps to apply. Your answers are saved after every step, so you can stop and come back any time.",
+    "infoRequiredTitle": "Our reviewer needs a few more details",
+    "infoRequiredBody": "Open the highlighted steps, update them and submit again.",
+    "nextTitle": "What happens next",
+    "next": {
+      "one": "Our verification team checks your details and documents.",
+      "two": "Each service you offer is approved separately. You may hear from us if anything is unclear.",
+      "three": "Once approved, you will start receiving job invitations from customers near you."
+    },
+    "autoRefresh": "This page updates by itself while we review.",
+    "rejectedTitle": "Your application was not approved",
+    "rejectedBody": "Contact support if you would like to know more.",
+    "contactSupport": "Contact support",
+    "decisionNote": "Note from our team",
+    "checklistTitle": "Application steps",
+    "documents": "My documents"
+  },
+  "checklist": {
+    "a11y": "Step {{number}}: {{title}}, {{state}}",
+    "reviewerSays": "Reviewer's note",
+    "state": {
+      "completed": "Done",
+      "next": "Up next",
+      "attention": "Needs attention",
+      "upcoming": "Not started"
+    }
+  },
+  "wizard": {
+    "stepOf": "Step {{number}} of {{total}}",
+    "headerTitle": "Step {{number}} of {{total}}",
+    "readOnly": "Your application is with our team, so it can't be changed right now.",
+    "fixErrors": "Please fix the highlighted details.",
+    "unknownStep": "This step doesn't exist"
+  },
+  "steps": {
+    "personal": {
+      "title": "About you",
+      "subtitle": "Your name and contact details, as on your ID."
+    },
+    "location": {
+      "title": "Where you live",
+      "subtitle": "This helps us match you with customers nearby."
+    },
+    "services": {
+      "title": "Services you offer",
+      "subtitle": "Pick every kind of work you want to do. Each one is approved separately."
+    },
+    "service_details": {
+      "title": "Rates and details",
+      "subtitle": "Your experience and charges for each service."
+    },
+    "experience": {
+      "title": "Experience",
+      "subtitle": "Tell customers about your work and training."
+    },
+    "service_area": {
+      "title": "Work area",
+      "subtitle": "How far you are willing to travel for a job."
+    },
+    "availability": {
+      "title": "Availability",
+      "subtitle": "When you can work each week."
+    },
+    "documents": {
+      "title": "Documents",
+      "subtitle": "Upload proof so we can verify you."
+    },
+    "review": {
+      "title": "Review and submit",
+      "subtitle": "Check everything, then send your application."
+    }
+  },
+  "personal": {
+    "fullName": "Full name (as on your ID)",
+    "dateOfBirth": "Date of birth",
+    "adultHint": "You must be 18 or older to work on Fix60.",
+    "genderOptional": "Gender (optional)",
+    "whatsappOptional": "WhatsApp number (optional)",
+    "whatsappHint": "We send job updates here if you allow it.",
+    "emailOptional": "Email (optional)"
+  },
+  "gender": {
+    "female": "Female",
+    "male": "Male",
+    "other": "Other",
+    "prefer_not_to_say": "Prefer not to say"
+  },
+  "location": {
+    "district": "District",
+    "locality": "Locality",
+    "addressNote": "House name, street or landmark (optional)",
+    "addressNoteHint": "Only our verification team can see this.",
+    "privateNotice": "Customers never see your address. They only see your locality.",
+    "localitiesFailed": "We couldn't load localities. Pull down to try again."
+  },
+  "services": {
+    "selectedCount_one": "{{count}} service selected",
+    "selectedCount_other": "{{count}} services selected"
+  },
+  "serviceDetails": {
+    "noServices": "Pick your services in step 3 first.",
+    "eligibility": "This service needs at least {{years}} of experience.",
+    "years": "Years of experience in this service",
+    "ratesTitle": "Your rates",
+    "ratesHint": "Fill at least one. Leave the others empty.",
+    "rate": {
+      "hourly": "Per hour",
+      "daily": "Per day",
+      "monthly": "Per month"
+    },
+    "negotiable": "My rates are negotiable",
+    "minBooking": "Shortest job you will take",
+    "questionsTitle": "A few questions"
+  },
+  "experience": {
+    "years": "Total years of work experience",
+    "bio": "About you (optional)",
+    "bioHint": "Customers see this on your profile. Don't add phone numbers.",
+    "previousWork": "Previous work (optional)",
+    "previousWorkHint": "Homes, hospitals or companies you have worked for.",
+    "languages": "Languages you speak",
+    "qualificationsTitle": "Qualifications and training",
+    "qualificationsHint": "Optional. Add courses, certificates or past jobs.",
+    "qualificationTitle": "Title",
+    "issuer": "Issued by (optional)",
+    "year": "Year (optional)",
+    "addQualification": "Add qualification"
+  },
+  "languages": {
+    "Malayalam": "Malayalam",
+    "English": "English",
+    "Tamil": "Tamil",
+    "Hindi": "Hindi",
+    "Kannada": "Kannada",
+    "Other": "Other"
+  },
+  "qualificationKind": {
+    "qualification": "Qualification",
+    "training": "Training",
+    "certification": "Certificate",
+    "work_experience": "Work experience"
+  },
+  "serviceArea": {
+    "centre": "Centre of your work area",
+    "fromDevice": "Your current location",
+    "savedCentre": "Saved location",
+    "noCentre": "Choose your locality in step 2 or use your current location.",
+    "coords": "Lat {{lat}}, Lng {{lng}}",
+    "useMyLocation": "Use my current location",
+    "useLocality": "Use {{name}} instead",
+    "locate": {
+      "denied": "Location permission was not given. We'll use your locality instead. You can allow location in your phone settings.",
+      "unavailable": "We couldn't get your location. Check that location is on and try again."
+    },
+    "radius": "How far you will travel",
+    "radiusSummary": "Jobs within {{radius}} of {{place}}",
+    "yourCentre": "your centre",
+    "travel": "Will you travel to the customer?"
+  },
+  "travel": {
+    "yes": "Yes",
+    "no": "No",
+    "depends_on_distance": "Depends on distance"
+  },
+  "availability": {
+    "types": "Kind of work",
+    "dayParts": "Time of day",
+    "maxHours": "Most hours per day",
+    "weeklyTitle": "Weekly schedule",
+    "weeklyHint": "Turn on the days you work and set your hours.",
+    "dayOff": "Not working",
+    "start": "{{day}} start",
+    "end": "{{day}} end",
+    "saved": "Availability saved"
+  },
+  "availabilityType": {
+    "hourly": "Hourly",
+    "part_time": "Part time",
+    "full_time": "Full time",
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "flexible": "Flexible"
+  },
+  "dayPart": {
+    "morning": "Morning",
+    "afternoon": "Afternoon",
+    "evening": "Evening",
+    "night": "Night"
+  },
+  "timeOff": {
+    "title": "Time off",
+    "hint": "You won't get job invitations during these times.",
+    "empty": "No time off planned",
+    "untitled": "Time off",
+    "addTitle": "Add time off",
+    "startDate": "From date",
+    "startTime": "From time",
+    "endDate": "To date",
+    "endTime": "To time",
+    "reason": "Reason (optional)",
+    "add": "Save time off",
+    "removeTitle": "Remove this time off?",
+    "errors": {
+      "missing": "Pick both start and end date and time.",
+      "order": "The end must be after the start.",
+      "past": "This time has already passed."
+    }
+  },
+  "documents": {
+    "title": "My documents",
+    "screenIntro": "Your verification documents and their review status.",
+    "loading": "Loading documents…",
+    "privacyTitle": "Your documents are private",
+    "privacyBody": "Only Fix60 verification staff can view them. Customers never see your documents.",
+    "formats": "JPG, PNG or PDF, up to 5 MB each.",
+    "mandatory": "Required",
+    "optional": "Optional",
+    "notUploaded": "Not uploaded yet",
+    "upload": "Upload",
+    "reupload": "Re-upload",
+    "reviewNote": "Note from reviewer",
+    "chooseSource": "Choose how to add it",
+    "source": {
+      "camera": "Take a photo",
+      "gallery": "Choose from gallery",
+      "pdf": "Choose a PDF or file"
+    },
+    "stage": {
+      "idle": "",
+      "picking": "Waiting for your file…",
+      "preparing": "Preparing upload…",
+      "uploading": "Uploading securely…",
+      "verifying": "Checking the file…"
+    },
+    "errors": {
+      "permission": "Permission was not given. Allow camera or photos access in your phone settings.",
+      "tooLarge": "This file is bigger than 5 MB. Take a clearer, smaller photo or choose another file.",
+      "badType": "Only JPG, PNG or PDF files can be uploaded.",
+      "unreadable": "We couldn't read this file. Please try another one."
+    },
+    "last4Label": "Last 4 digits of your ID number",
+    "last4Hint": "Enter only the last 4 digits. We never store full Aadhaar numbers.",
+    "last4Error": "Enter exactly 4 digits.",
+    "last4Saved": "ID ending in {{digits}}",
+    "removeTitle": "Remove document?",
+    "removeBody": "{{name}} will be removed. You can upload it again.",
+    "extrasTitle": "Extra certificates",
+    "extrasBody": "Optional. Certificates help customers trust you.",
+    "missingTitle": "Please upload these first"
+  },
+  "review": {
+    "addressNote": "Address note: {{note}}",
+    "provided": "added",
+    "qualifications_one": "{{count}} qualification",
+    "qualifications_other": "{{count}} qualifications",
+    "documentsMissing_one": "{{count}} required document missing",
+    "documentsMissing_other": "{{count}} required documents missing",
+    "documentsReady": "All required documents uploaded",
+    "notFilled": "Not filled in yet",
+    "editA11y": "Edit {{step}}",
+    "incompleteTitle": "Some steps are not finished",
+    "declaration": "I confirm my details are true and I agree to the provider agreement",
+    "declarationPrefix": "I confirm the details I gave are true and I agree to the",
+    "agreement": "Provider agreement",
+    "declarationSuffix": ".",
+    "submit": "Submit application"
+  },
+  "jobs": {
+    "openTitle": "New job invitations",
+    "privacyHint": "Customer contact details are shared only after a booking is confirmed.",
+    "emptyTitle": "No new jobs right now",
+    "emptyBody": "We'll notify you when a customer nearby needs your service. Keep your availability up to date."
+  },
+  "invitation": {
+    "title": "Job invitation",
+    "cardA11y": "{{service}} job in {{area}}",
+    "directed": "Directed to you",
+    "budget": "Budget {{amount}}",
+    "noBudget": "No budget given",
+    "distance": "{{value}} km away",
+    "expired": "Expired",
+    "leftHours": "Respond within {{hours}}h {{minutes}}m",
+    "leftMinutes": "Respond within {{minutes}}m {{seconds}}s",
+    "customer": "Customer",
+    "requirements": "What they need",
+    "noRequirements": "No extra details given",
+    "contactHidden": "Phone number and full address are shared only after the customer confirms the booking.",
+    "accept": "Accept job",
+    "decline": "Decline",
+    "acceptTitle": "Accept this job?",
+    "acceptBody": "The customer will be told you are available. Only accept if you can do the job at this time.",
+    "acceptedTitle": "You accepted this job",
+    "acceptedBody": "The customer will now confirm. Once they book you, their contact details and address will appear in Bookings.",
+    "declinedBody": "You declined this job.",
+    "expiredBody": "This invitation has expired.",
+    "withdrawnBody": "This job was given to someone else or cancelled by the customer.",
+    "goneTitle": "This job is no longer available",
+    "goneBody": "It has expired or another provider was chosen. New jobs will appear on the Jobs tab."
+  },
+  "decline": {
+    "title": "Why are you declining?",
+    "reasons": {
+      "not_available": "Not available",
+      "too_far": "Too far",
+      "budget_low": "Budget too low",
+      "not_my_skill": "Not my skill",
+      "other": "Other"
+    },
+    "otherLabel": "Tell us the reason",
+    "pickReason": "Please choose a reason.",
+    "otherRequired": "Please write a short reason.",
+    "submit": "Decline job"
+  },
+  "bookings": {
+    "cardA11y": "{{service}} booking {{code}}",
+    "scope": {
+      "upcoming": "Upcoming",
+      "active": "Active",
+      "past": "Past"
+    },
+    "empty": {
+      "upcoming": "No upcoming bookings",
+      "active": "No job in progress",
+      "past": "No past bookings yet"
+    }
+  },
+  "booking": {
+    "title": "Booking",
+    "customer": "Customer",
+    "address": "Address",
+    "requirements": "Requirements",
+    "actions": {
+      "start": "Start job",
+      "complete": "Mark job done",
+      "cancel": "Cancel booking"
+    },
+    "confirm": {
+      "startTitle": "Start this job?",
+      "startBody": "Only start when you have reached the customer.",
+      "completeTitle": "Mark this job as done?",
+      "completeBody": "The customer will be asked to confirm and review.",
+      "cancelTitle": "Cancel this booking?",
+      "cancelBody": "Cancelling often affects your rating and future jobs."
+    },
+    "cancelTitle": "Cancel booking",
+    "cancelHint": "Please tell the customer why. They will see this reason.",
+    "cancelReason": "Reason",
+    "cancelReasonError": "Please write a reason (at least 5 letters).",
+    "cancelledTitle": "Cancelled by {{by}}",
+    "cancelledBy": {
+      "customer": "the customer",
+      "provider": "you",
+      "admin": "Fix60",
+      "system": "Fix60"
+    },
+    "noReason": "No reason given",
+    "startedAt": "Started {{time}}",
+    "completedAt": "Completed {{time}}",
+    "reviewTitle": "Customer's review",
+    "report": "Report customer",
+    "reportHint": "For unsafe behaviour or misconduct",
+    "help": "Get help with this booking"
+  },
+  "profile": {
+    "code": "Provider ID {{code}}",
+    "previewTitle": "Your public profile",
+    "previewHint": "This is how customers see you.",
+    "noPreview": "Your public profile appears once a service is approved.",
+    "experience": "{{years}} experience",
+    "ratingA11y": "Rated {{rating}} out of 5",
+    "reviewCount_one": "{{rating}} · {{count}} review",
+    "reviewCount_other": "{{rating}} · {{count}} reviews",
+    "noRatingYet": "Rating shows after 3 reviews",
+    "languages": "Speaks {{list}}",
+    "recentReviews": "Recent reviews",
+    "servicesTitle": "Service approvals",
+    "noServices": "No services yet",
+    "documents": "My documents",
+    "agreement": "Provider agreement"
+  },
+  "validation": {
+    "required": "This is required.",
+    "fullName": "Enter your full name.",
+    "dateOfBirth": "Pick your date of birth.",
+    "email": "Enter a valid email address.",
+    "tooLong": "This is too long.",
+    "pickService": "Pick at least one service.",
+    "rateRequired": "Enter at least one rate.",
+    "rateInvalid": "Enter rates as whole rupees.",
+    "minBooking": "Choose the shortest job you will take.",
+    "years": "Enter years between 0 and 60.",
+    "languages": "Pick at least one language.",
+    "qualificationTitle": "Enter a title or remove this item.",
+    "qualificationYear": "Enter a valid year.",
+    "location": "Set the centre of your work area.",
+    "radius": "Choose between 1 and 50 km.",
+    "availabilityTypes": "Pick at least one kind of work.",
+    "dayParts": "Pick at least one time of day.",
+    "maxHours": "Choose between 1 and 16 hours.",
+    "rulesEmpty": "Turn on at least one working day.",
+    "timeOrder": "The end time must be after the start time.",
+    "declaration": "Please confirm the declaration to submit."
+  }
+}

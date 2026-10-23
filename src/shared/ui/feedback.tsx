@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
   iconBubble: { width: 64, height: 64, borderRadius: 32, alignItems: 'center', justifyContent: 'center' },
   notice: { flexDirection: 'row', gap: 10, padding: 12, alignItems: 'flex-start' },
   pill: { flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 10, paddingVertical: 4, borderRadius: 999, alignSelf: 'flex-start' },
-  chip: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 14, minHeight: 40, borderRadius: 999, borderWidth: 1 },
+  chip: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 14, minHeight: 48, borderRadius: 999, borderWidth: 1 },
   avatar: { alignItems: 'center', justifyContent: 'center' },
   stars: { flexDirection: 'row', gap: 2 },
 });

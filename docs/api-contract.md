@@ -112,3 +112,25 @@ Shapes that already exist in `@fix60/shared` are copied verbatim: `Me`, `AuthTok
 | `booking_update` | `bookingCode`, `status`, `role` | Open the role's booking detail |
 | `support_reply` | `ticketCode` | Open `/support/:code` |
 | `application_update` | `status` | Open `/provider` |
+
+## Open questions found while building the app
+
+These are the app's current assumptions. Please confirm them or change the contract.
+
+1. **Budget units:** `maxBudget` (search) and `budgetAmount` (request) are treated as ₹ per hour. Is that right, or is either one a total?
+2. **Overdue bookings:** a `confirmed` booking whose slot has passed without starting is listed under `active`. Should there be a `no_show` status or a rule for it?
+3. **Expired invitations:** when every invitation on a request expires, the request stays `provider_notified`. It probably needs to move on, for example to `provider_declined`, plus an admin queue.
+4. **Expired vs taken invitations:** invitations use one `INVALID_STATE_TRANSITION` code for both. Separate `INVITATION_EXPIRED` and `INVITATION_FILLED` codes would allow clearer messages.
+5. **Decline reasons:** suggest `{ reasonCode, note? }` with an enum instead of free text.
+6. **Required documents:** add `requiredDocuments` to `ProviderApplication`. Today the app works them out by fetching every selected service.
+7. **Documents per service:** are documents per type or per service? The app sends no `serviceId`.
+8. **Stub documents:** documents between `upload-url` and `finalise` have no status. Consider adding `awaiting_upload`.
+9. **Locality names:** add `localityName` to `Me` and to `draft.location` (with lat/lng), and `districtName` to `ServiceRequestDetail` and `Booking`. This saves extra lookups.
+10. **Editable application:** add `canEdit` to `ProviderApplication`. Today the app assumes only `draft` and `info_required` are editable.
+11. **Provider rates:** `GET /providers/:code` returns no rates for a specific service. Consider `?serviceId=`.
+12. **Banner links:** banner `linkPath` must use app routes, e.g. `/customer/services/<slug>`.
+13. **Language codes:** `ProviderCard.languages` needs a defined code list.
+14. **Profile photo:** `Me` has no profile photo URL.
+15. **Phone number changes:** there is no endpoint to request one; support handles it for now.
+16. **Unread count:** `POST /notifications/:id/read` returns 204, so the app refetches to get the new unread count.
+17. **Deletion grace period:** signing in during the 7-day window should be allowed and should offer cancellation.

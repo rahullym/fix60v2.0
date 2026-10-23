@@ -1,3 +1,4 @@
+import i18next from 'i18next';
 import type { ClockTime, IsoDate, LocalizedText } from '../api/types';
 
 export const APP_TIME_ZONE = 'Asia/Kolkata';
@@ -58,15 +59,26 @@ export function formatSlot(date: IsoDate, startTime: ClockTime, locale: string):
   return formatDateTime(`${date}T${startTime}:00+05:30`, locale);
 }
 
-/** "5 min ago" style relative time. */
+/** "5 min ago" style relative time. Hermes may lack Intl.RelativeTimeFormat, so fall back to i18n copy. */
 export function formatRelative(value: string, locale: string, now: Date = new Date()): string {
   const diffSeconds = Math.round((new Date(value).getTime() - now.getTime()) / 1000);
-  const rtf = new Intl.RelativeTimeFormat(intlLocale(locale), { numeric: 'auto' });
   const abs = Math.abs(diffSeconds);
-  if (abs < 60) return rtf.format(diffSeconds, 'second');
-  if (abs < 3600) return rtf.format(Math.round(diffSeconds / 60), 'minute');
-  if (abs < 86_400) return rtf.format(Math.round(diffSeconds / 3600), 'hour');
-  return rtf.format(Math.round(diffSeconds / 86_400), 'day');
+  const [unit, amount] =
+    abs < 60
+      ? (['second', diffSeconds] as const)
+      : abs < 3600
+        ? (['minute', Math.round(diffSeconds / 60)] as const)
+        : abs < 86_400
+          ? (['hour', Math.round(diffSeconds / 3600)] as const)
+          : (['day', Math.round(diffSeconds / 86_400)] as const);
+  if (typeof Intl.RelativeTimeFormat === 'function') {
+    return new Intl.RelativeTimeFormat(intlLocale(locale), { numeric: 'auto' }).format(amount, unit);
+  }
+  if (unit === 'second') {
+    return i18next.t('common:relative.now', { lng: locale });
+  }
+  const direction = amount < 0 ? 'ago' : 'in';
+  return i18next.t(`common:relative.${unit}s_${direction}`, { lng: locale, count: Math.abs(amount) });
 }
 
 /** Date-only strings are calendar dates in IST; full timestamps parse as-is. */

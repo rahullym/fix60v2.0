@@ -1,1 +1,347 @@
-{}
+{
+  "common": {
+    "loading": "Loading…"
+  },
+  "tabs": {
+    "home": "Home",
+    "requests": "Requests",
+    "bookings": "Bookings",
+    "saved": "Saved",
+    "account": "Account"
+  },
+  "home": {
+    "greeting": "Hello, {{name}}",
+    "greetingNoName": "Hello",
+    "setArea": "Set your area",
+    "areaA11y": "Your area: {{area}}. Tap to change.",
+    "searchPlaceholder": "What help do you need?",
+    "categories": "Services",
+    "activeRequests": "Active requests",
+    "upcomingBooking": "Upcoming booking",
+    "activeBooking": "Happening now",
+    "footerNote": "Fix60 connects you with verified home-help providers in Kerala."
+  },
+  "safety": {
+    "title": "Your safety comes first",
+    "verifiedTitle": "Verified providers",
+    "verifiedBody": "Every provider's ID and documents are checked by our team before they can take bookings.",
+    "privacyTitle": "Your details stay private",
+    "privacyBody": "Your phone number and exact address are shared only after you confirm a provider.",
+    "reportTitle": "Report or block anytime",
+    "reportBody": "Something feels wrong? Report or block a provider from their profile or booking. Our safety team reviews every report."
+  },
+  "browse": {
+    "title": "Find a service",
+    "label": "Search services",
+    "placeholder": "e.g. cleaning, cook, elder care",
+    "emptyTitle": "No matching services",
+    "emptyBody": "Try a different word, or browse the categories on the home screen."
+  },
+  "category": {
+    "emptyTitle": "No services yet",
+    "emptyBody": "Services in this category will appear here soon."
+  },
+  "service": {
+    "whatToExpect": "What to expect",
+    "steps": {
+      "postTitle": "{{step}}. Tell us what you need",
+      "postBody": "Choose the date, time, hours and any special requirements.",
+      "acceptTitle": "{{step}}. Providers respond",
+      "acceptBody": "Verified providers near you see your request and accept if they're free.",
+      "chooseTitle": "{{step}}. You choose",
+      "chooseBody": "Compare who accepted and confirm one. Contact details are shared only then.",
+      "reviewTitle": "{{step}}. Mark it done and review",
+      "reviewBody": "After the service, mark it completed and rate your provider."
+    },
+    "checksTitle": "How providers are checked",
+    "checksVerified": "Identity and documents verified by the Fix60 team",
+    "checksExperience": "At least {{years}} of experience",
+    "quickRequest": "Post a quick request",
+    "quickRequestHint": "Nearby verified providers will be invited",
+    "browseProviders": "Browse providers"
+  },
+  "search": {
+    "title": "Providers",
+    "filters": "Filters",
+    "filtersCount": "Filters ({{count}})",
+    "where": "Where",
+    "when": "When",
+    "anyTime": "Any date and time",
+    "anyTimeHint": "Pick a date to see only providers who are free then.",
+    "maxBudget": "Maximum budget",
+    "anyBudget": "Any budget",
+    "perHour": "Per hour, in rupees",
+    "minExperience": "Minimum experience",
+    "yearsSuffix": "yrs",
+    "language": "Speaks",
+    "anyLanguage": "Any",
+    "reset": "Reset",
+    "apply": "Show providers",
+    "anywhere": "All areas",
+    "resultCount_one": "{{count}} provider",
+    "resultCount_other": "{{count}} providers",
+    "setAreaHint": "Choose your area in Filters to see providers near you first.",
+    "emptyTitle": "No providers match yet",
+    "emptyBody": "Try fewer filters, or post a quick request and we'll invite providers near you.",
+    "postQuick": "Post a quick request instead",
+    "endOfList": "That's everyone for now.",
+    "pickServiceTitle": "Choose a service to see providers",
+    "pickService": "Choose a service"
+  },
+  "languages": {
+    "ml": "Malayalam",
+    "en": "English",
+    "hi": "Hindi",
+    "ta": "Tamil",
+    "kn": "Kannada",
+    "te": "Telugu",
+    "bn": "Bengali"
+  },
+  "provider": {
+    "newOnFix60": "New on Fix60",
+    "ratingShort": "{{rating}} ({{count}})",
+    "ratingA11y": "Rated {{rating}} out of 5 from {{count}} reviews",
+    "experience": "{{years}} experience",
+    "memberSince": "On Fix60 since {{date}}",
+    "contactAfterBooking": "Phone numbers are shared only after you confirm a booking. Please keep all arrangements on Fix60.",
+    "about": "About",
+    "services": "Services and rates",
+    "noServices": "This provider has no active services right now.",
+    "rateOnRequest": "Rate on request",
+    "minBooking": "Minimum {{duration}}",
+    "availability": "Availability",
+    "details": "Details",
+    "languages": "Languages",
+    "travel": "Travel",
+    "qualifications": "Qualifications and training",
+    "reviews_one": "Reviews ({{count}})",
+    "reviews_other": "Reviews ({{count}})",
+    "noReviews": "No reviews yet.",
+    "reviewBy": "{{name}} · {{service}}",
+    "request": "Request {{name}}",
+    "moreActions": "More actions",
+    "reportSomething": "Report a concern"
+  },
+  "availabilityType": {
+    "hourly": "Hourly",
+    "part_time": "Part time",
+    "full_time": "Full time",
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "flexible": "Flexible"
+  },
+  "dayPart": {
+    "morning": "Morning",
+    "afternoon": "Afternoon",
+    "evening": "Evening",
+    "night": "Night"
+  },
+  "travel": {
+    "yes": "Travels to your home",
+    "no": "Works near home only",
+    "depends_on_distance": "Depends on distance"
+  },
+  "qualificationKind": {
+    "qualification": "Qualification",
+    "training": "Training",
+    "certification": "Certification",
+    "work_experience": "Work experience"
+  },
+  "saved": {
+    "emptyTitle": "No saved providers",
+    "emptyBody": "Tap the heart on a provider to save them for later.",
+    "findProviders": "Find providers",
+    "saveA11y": "Save {{name}}",
+    "unsaveA11y": "Remove {{name}} from saved"
+  },
+  "location": {
+    "district": "District",
+    "locality": "Locality",
+    "chooseDistrict": "Choose district",
+    "chooseLocality": "Choose locality",
+    "districtFirst": "Choose a district first",
+    "loadFailed": "Couldn't load places. Pull down to try again."
+  },
+  "form": {
+    "titleQuick": "Quick request",
+    "titleDirected": "Request a provider",
+    "introQuick": "Tell us what you need. We'll invite verified providers nearby and you choose from those who accept.",
+    "introDirected": "Your request goes to this provider only. If they can't make it, you can post a quick request.",
+    "service": "Service",
+    "chooseService": "Choose a service",
+    "areaNote": "Area or landmark",
+    "areaNotePlaceholder": "e.g. Near St. Mary's church, Kakkanad",
+    "areaNoteHint": "Your exact address is shared only after you confirm a provider.",
+    "date": "Date",
+    "startTime": "Start time",
+    "duration": "Hours needed",
+    "hoursSuffix": "hrs",
+    "durationHint": "Need full-day or monthly help? Say so in the requirements below.",
+    "budget": "Your budget (optional)",
+    "budgetPlaceholder": "Per hour",
+    "budgetHint": "Per hour, in rupees. Leave empty to see providers' own rates.",
+    "providerRate": "This provider charges {{rate}}",
+    "requirements": "Requirements",
+    "requirementsPlaceholder": "e.g. 2 bedrooms, vegetarian cooking, elderly parent needs help walking",
+    "safetyTitle": "Keep it safe",
+    "safetyBody": "Requests for anything illegal, unsafe or outside the service are not allowed. Requests are reviewed, and accounts that break the rules are suspended.",
+    "contactPhone": "Contact phone",
+    "contactPhoneHint": "Your registered number. Shared with the provider only after you confirm.",
+    "whatsapp": "WhatsApp number (optional)",
+    "whatsappPlaceholder": "10-digit mobile number",
+    "submitQuick": "Post request",
+    "submitDirected": "Send request",
+    "fixErrors": "Please fix the highlighted fields.",
+    "errors": {
+      "service": "Choose a service.",
+      "district": "Choose your district.",
+      "locality": "Choose your locality.",
+      "date": "Choose a date.",
+      "datePast": "Choose today or a later date.",
+      "startTime": "Choose a start time.",
+      "timePast": "That time has already passed. Choose a later time.",
+      "duration": "Choose between 1 and 12 hours.",
+      "budget": "Enter a valid amount per hour.",
+      "tooLong": "This is too long. Please shorten it.",
+      "noPhone": "Add a phone number to your profile first."
+    }
+  },
+  "request": {
+    "directed": "Sent to a chosen provider"
+  },
+  "requests": {
+    "new": "New request",
+    "emptyTitle": "No requests yet",
+    "emptyBody": "Post a request and verified providers near you can accept it.",
+    "acceptedCount_one": "{{count}} provider accepted. Choose to confirm.",
+    "acceptedCount_other": "{{count}} providers accepted. Choose one to confirm."
+  },
+  "requestStatusHelp": {
+    "submitted": "We've received your request and will start finding providers shortly.",
+    "under_review": "Our team is checking your request. This usually takes a few minutes.",
+    "matching": "We're looking for verified providers near you who are free at this time.",
+    "provider_notified": "Nearby providers have been invited. You'll be notified when someone accepts.",
+    "provider_accepted": "A provider has accepted. Review them below and choose one to confirm the booking.",
+    "provider_declined": "The invited providers couldn't take this one. We're still looking, or you can change the time.",
+    "customer_confirmation_pending": "Providers have accepted. Choose one below to confirm your booking.",
+    "booking_confirmed": "Your booking is confirmed. Contact details are now shared on the booking.",
+    "cancelled": "This request was cancelled.",
+    "disputed": "Our support team is looking into this request. We'll contact you.",
+    "directed": {
+      "provider_notified": "Your request was sent to this provider. You'll be notified when they reply.",
+      "provider_accepted": "The provider accepted. Confirm below to book them.",
+      "provider_declined": "This provider can't take your request. Post a quick request to reach others nearby.",
+      "customer_confirmation_pending": "The provider accepted. Confirm below to book them."
+    }
+  },
+  "requestDetail": {
+    "autoRefresh": "This page updates automatically.",
+    "cancelReason": "Reason: {{reason}}",
+    "viewBooking": "View booking",
+    "postQuickInstead": "Post a quick request",
+    "acceptedTitle": "Providers who accepted",
+    "noneAcceptedYet": "No one has accepted yet.",
+    "acceptedAt": "Accepted {{when}}",
+    "choose": "Choose {{name}}",
+    "requestedProvider": "Requested provider",
+    "details": "Details",
+    "when": "When",
+    "created": "Requested on",
+    "timeline": "Progress",
+    "cancel": "Cancel request",
+    "cancelTitle": "Cancel this request?",
+    "cancelBody": "Providers will no longer see it. Tell us why so we can improve.",
+    "cancelConfirm": "Cancel request"
+  },
+  "confirm": {
+    "title": "Book {{name}}?",
+    "body": "This confirms your booking. Your phone number and address note will be shared with this provider, and the other requests will be closed.",
+    "action": "Confirm booking"
+  },
+  "cancel": {
+    "reasonLabel": "Reason",
+    "reasonPlaceholder": "e.g. Plans changed",
+    "reasonRequired": "Please tell us the reason.",
+    "keep": "Keep it"
+  },
+  "bookings": {
+    "scope": {
+      "upcoming": "Upcoming",
+      "active": "Active",
+      "past": "Past"
+    },
+    "empty": {
+      "upcoming": "No upcoming bookings",
+      "active": "Nothing in progress",
+      "past": "No past bookings"
+    },
+    "emptyBody": "Bookings appear here once you confirm a provider.",
+    "findHelp": "Find help"
+  },
+  "bookingStatusHelp": {
+    "confirmed": "You're booked. You can call or WhatsApp your provider to agree the details.",
+    "service_started": "The service is in progress. Mark it as completed once it's done.",
+    "service_completed": "This service is complete. Thank you for using Fix60.",
+    "cancelled": "This booking was cancelled.",
+    "disputed": "Our support team is looking into this booking. We'll contact you."
+  },
+  "booking": {
+    "provider": "Your provider",
+    "agreedRate": "Agreed rate: {{rate}}",
+    "callHint": "Calls {{name}}",
+    "openFailed": "Couldn't open that app on this phone.",
+    "viewProfile": "View profile",
+    "address": "Address note",
+    "startedAt": "Started",
+    "completedAt": "Completed",
+    "yourReview": "Your review",
+    "markComplete": "Mark as completed",
+    "completeTitle": "Mark as completed?",
+    "completeBody": "Confirm that {{name}} has finished the service.",
+    "completeConfirm": "Yes, it's done",
+    "review": "Rate and review",
+    "cancel": "Cancel booking",
+    "cancelTitle": "Cancel this booking?",
+    "cancelBody": "Your provider will be told. Please cancel as early as you can.",
+    "cancelConfirm": "Cancel booking",
+    "cancelledBy": "Cancelled by {{who}}: {{reason}}",
+    "cancelledByWho": {
+      "customer": "you",
+      "provider": "the provider",
+      "admin": "Fix60 support",
+      "system": "Fix60"
+    },
+    "reportProvider": "Report provider",
+    "getHelp": "Get help with this booking"
+  },
+  "review": {
+    "title": "Review",
+    "heading": "How was {{name}}?",
+    "intro": "Your rating helps other families choose with confidence.",
+    "tapToRate": "Tap a star to rate",
+    "ratingA11y": "Rating: {{rating}} out of 5",
+    "ratingRequired": "Please choose a rating.",
+    "ratingWord": {
+      "1": "Poor",
+      "2": "Below average",
+      "3": "Okay",
+      "4": "Good",
+      "5": "Excellent"
+    },
+    "comment": "Comment (optional)",
+    "commentPlaceholder": "What went well? What could be better?",
+    "commentHint": "Your first name is shown with your review.",
+    "safetyNote": "If something unsafe happened, please report it instead so our safety team can act.",
+    "submit": "Submit review",
+    "alreadyTitle": "Already reviewed",
+    "alreadyBody": "Thanks, you've already reviewed this booking.",
+    "notYetTitle": "Not ready for review",
+    "notYetBody": "You can review once the service is completed."
+  },
+  "account": {
+    "editProfile": "Edit profile",
+    "about": "About Fix60",
+    "signOutTitle": "Sign out?",
+    "signOutBody": "You can sign in again any time with your phone number."
+  }
+}

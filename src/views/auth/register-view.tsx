@@ -124,6 +124,7 @@ export function RegisterView(): ReactNode {
           <DateTimeField
             label={t('auth:register.dateOfBirth')}
             mode="date"
+            initialDate={new Date(new Date().getFullYear() - 25, 0, 1)}
             value={dateOfBirth}
             displayValue={dateOfBirth ? formatDate(dateOfBirth, locale) : null}
             onChange={setDateOfBirth}

@@ -7,6 +7,7 @@ import { StatusBar } from 'expo-status-bar';
 import { type ReactNode, useEffect, useState } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { PushRegistration } from '@/features/push';
 import { installMockApi } from '@/shared/api/mock';
 import { session, useSession } from '@/shared/auth/session';
 import { env } from '@/shared/config/env';
@@ -28,6 +29,7 @@ function RootNavigator(): ReactNode {
   return (
     <>
       <StatusBar style={theme.scheme === 'dark' ? 'light' : 'dark'} />
+      <PushRegistration />
       <Stack
         screenOptions={{
           headerShown: false,
@@ -35,16 +37,17 @@ function RootNavigator(): ReactNode {
           headerTintColor: theme.colors.text,
           headerStyle: { backgroundColor: theme.colors.background },
         }}>
-        <Stack.Protected guard={isSignedIn && role === 'customer'}>
+        <Stack.Screen name="index" />
+        <Stack.Protected guard={isSignedIn && role === 'customer'} redirectTo="/">
           <Stack.Screen name="customer" />
         </Stack.Protected>
-        <Stack.Protected guard={isSignedIn && role === 'provider'}>
+        <Stack.Protected guard={isSignedIn && role === 'provider'} redirectTo="/">
           <Stack.Screen name="provider" />
         </Stack.Protected>
-        <Stack.Protected guard={isSignedIn}>
+        <Stack.Protected guard={isSignedIn} redirectTo="/">
           <Stack.Screen name="(account)" />
         </Stack.Protected>
-        <Stack.Protected guard={!isSignedIn}>
+        <Stack.Protected guard={!isSignedIn} redirectTo="/">
           <Stack.Screen name="(auth)" />
         </Stack.Protected>
         <Stack.Screen name="policy/[slug]" options={{ headerShown: true, title: '' }} />

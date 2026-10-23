@@ -164,10 +164,13 @@ export function DateTimeField({
   onChange,
   minimumDate,
   maximumDate,
+  initialDate,
   error,
 }: {
   label: string;
   mode: 'date' | 'time';
+  /** Where the picker opens when no value is set (e.g. 25 years ago for a birth date). */
+  initialDate?: Date;
   value: Date | null;
   displayValue: string | null;
   onChange: (value: Date) => void;
@@ -177,7 +180,7 @@ export function DateTimeField({
 }): ReactNode {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
-  const [draft, setDraft] = useState<Date>(value ?? new Date());
+  const [draft, setDraft] = useState<Date>(value ?? initialDate ?? new Date());
 
   const handleChange = (event: DateTimePickerEvent, next?: Date): void => {
     if (Platform.OS === 'android') {
@@ -200,7 +203,7 @@ export function DateTimeField({
         placeholder={mode === 'date' ? t('common:actions.pickDate') : t('common:actions.pickTime')}
         error={error}
         onPress={() => {
-          setDraft(value ?? new Date());
+          setDraft(value ?? initialDate ?? new Date());
           setIsOpen(true);
         }}
         icon={mode === 'date' ? 'calendar-outline' : 'time-outline'}

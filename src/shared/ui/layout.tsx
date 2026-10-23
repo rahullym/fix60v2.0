@@ -1,6 +1,7 @@
-import type { ReactNode } from 'react';
+import { type ReactNode, useEffect, useState } from 'react';
 import {
-  KeyboardAvoidingView,
+  Dimensions,
+  Keyboard,
   Platform,
   Pressable,
   RefreshControl,
@@ -9,7 +10,7 @@ import {
   View,
   type ViewStyle,
 } from 'react-native';
-import { SafeAreaView, type Edge } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets, type Edge } from 'react-native-safe-area-context';
 import { useTheme } from '../theme/theme';
 import { Icon, type IconName } from './icon';
 import { Text } from './text';
@@ -26,6 +27,27 @@ export interface ScreenProps {
   contentStyle?: ViewStyle;
 }
 
+/**
+ * Height the on-screen keyboard currently covers. Used instead of KeyboardAvoidingView,
+ * which does not lift content under Android edge-to-edge (always on in SDK 58).
+ */
+export function useKeyboardInset(): number {
+  const [height, setHeight] = useState(0);
+  useEffect(() => {
+    const showEvent = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
+    const hideEvent = Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
+    const show = Keyboard.addListener(showEvent, (event) =>
+      setHeight(Math.max(event.endCoordinates.height, Dimensions.get('screen').height - event.endCoordinates.screenY)),
+    );
+    const hide = Keyboard.addListener(hideEvent, () => setHeight(0));
+    return () => {
+      show.remove();
+      hide.remove();
+    };
+  }, []);
+  return height;
+}
+
 /** Page container: safe area, padding, optional scroll + pull-to-refresh + sticky footer. */
 export function Screen({
   children,
@@ -38,9 +60,13 @@ export function Screen({
 }: ScreenProps): ReactNode {
   const theme = useTheme();
   const padding = { padding: theme.spacing(4), gap: theme.spacing(4) };
+  const keyboardInset = useKeyboardInset();
+  const insets = useSafeAreaInsets();
+  // SafeAreaView already pads the bottom inset; the keyboard covers it too, so don't count it twice.
+  const bottomInset = edges.includes('bottom') ? insets.bottom : 0;
   return (
     <SafeAreaView edges={edges} style={[styles.flex, { backgroundColor: theme.colors.background }]}>
-      <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <View style={[styles.flex, { paddingBottom: Math.max(0, keyboardInset - bottomInset) }]}>
         {isScrollable ? (
           <ScrollView
             keyboardShouldPersistTaps="handled"
@@ -62,7 +88,7 @@ export function Screen({
             {footer}
           </View>
         ) : null}
-      </KeyboardAvoidingView>
+      </View>
     </SafeAreaView>
   );
 }

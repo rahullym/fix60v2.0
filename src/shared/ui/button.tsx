@@ -51,7 +51,7 @@ export function Button({
       style={({ pressed }) => [
         styles.base,
         {
-          minHeight: isCompact ? 40 : 52,
+          minHeight: isCompact ? 48 : 52,
           paddingHorizontal: isCompact ? 14 : 20,
           backgroundColor: colors.bg,
           borderColor: colors.border,
