@@ -1,0 +1,214 @@
+{
+  "appName": "Fix60",
+  "tagline": "Trusted home help, near you",
+  "actions": {
+    "continue": "Continue",
+    "next": "Next",
+    "back": "Back",
+    "save": "Save",
+    "saveAndContinue": "Save and continue",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "done": "Done",
+    "close": "Close",
+    "retry": "Try again",
+    "edit": "Edit",
+    "delete": "Delete",
+    "remove": "Remove",
+    "select": "Select",
+    "search": "Search",
+    "pickDate": "Pick a date",
+    "pickTime": "Pick a time",
+    "call": "Call",
+    "whatsapp": "WhatsApp",
+    "viewAll": "View all",
+    "signOut": "Sign out",
+    "report": "Report",
+    "block": "Block",
+    "unblock": "Unblock",
+    "send": "Send",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "error": {
+    "title": "Something went wrong"
+  },
+  "empty": {
+    "noMatches": "No matches"
+  },
+  "language": {
+    "title": "Language",
+    "en": "English",
+    "ml": "മലയാളം"
+  },
+  "weekdays": {
+    "0": "Sunday",
+    "1": "Monday",
+    "2": "Tuesday",
+    "3": "Wednesday",
+    "4": "Thursday",
+    "5": "Friday",
+    "6": "Saturday"
+  },
+  "weekdaysShort": {
+    "0": "Sun",
+    "1": "Mon",
+    "2": "Tue",
+    "3": "Wed",
+    "4": "Thu",
+    "5": "Fri",
+    "6": "Sat"
+  },
+  "units": {
+    "hours_one": "{{count}} hour",
+    "hours_other": "{{count}} hours",
+    "years_one": "{{count}} year",
+    "years_other": "{{count}} years",
+    "km": "{{value}} km"
+  },
+  "rates": {
+    "hourly": "{{amount}}/hr",
+    "daily": "{{amount}}/day",
+    "monthly": "{{amount}}/month",
+    "negotiable": "Negotiable"
+  },
+  "badges": {
+    "verified": "Verified",
+    "police_verified": "Police verified",
+    "experienced": "Experienced",
+    "top_rated": "Top rated"
+  },
+  "reportReasons": {
+    "harassment": "Harassment",
+    "unsafe_behaviour": "Unsafe behaviour",
+    "false_information": "False information",
+    "inappropriate_request": "Inappropriate request",
+    "payment_issue": "Payment issue",
+    "misconduct": "Misconduct",
+    "other": "Something else"
+  },
+  "settings": {
+    "title": "Settings",
+    "account": "Account",
+    "profile": "Profile",
+    "notifications": "Notifications",
+    "privacy": "Privacy & consents",
+    "blocked": "Blocked users",
+    "support": "Help & support",
+    "policies": "Policies",
+    "terms": "Terms of service",
+    "privacyPolicy": "Privacy policy",
+    "safetyPolicy": "Safety policy",
+    "deleteAccount": "Delete account",
+    "version": "Version {{version}}"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "You're all caught up",
+    "markAllRead": "Mark all read"
+  },
+  "consents": {
+    "title": "Privacy & consents",
+    "service_communications": "Service updates by SMS and push",
+    "service_communicationsHint": "Booking confirmations, reminders and changes.",
+    "whatsapp_updates": "Updates on WhatsApp",
+    "whatsapp_updatesHint": "Get booking updates on WhatsApp.",
+    "marketing": "Offers and news",
+    "marketingHint": "Occasional offers. You can turn this off any time.",
+    "saved": "Preferences saved"
+  },
+  "deletion": {
+    "title": "Delete account",
+    "body": "Your account will be deleted 7 days after you confirm. You can cancel during that time. Bookings and reports are kept without your personal details.",
+    "confirm": "Delete my account",
+    "scheduled": "Deletion scheduled for {{date}}",
+    "cancel": "Keep my account"
+  },
+  "support": {
+    "title": "Help & support",
+    "newTicket": "New request",
+    "subject": "Subject",
+    "message": "Message",
+    "empty": "No support requests yet",
+    "status": {
+      "open": "Open",
+      "awaiting_user": "Awaiting your reply",
+      "resolved": "Resolved"
+    },
+    "reply": "Write a reply",
+    "fromSupport": "Fix60 support",
+    "callUs": "Call support",
+    "whatsappUs": "WhatsApp support"
+  },
+  "report": {
+    "title": "Report a problem",
+    "reason": "What happened?",
+    "details": "Tell us more (optional)",
+    "submitted": "Report {{code}} submitted. Our safety team will review it.",
+    "blockToo": "Also block this person"
+  },
+  "block": {
+    "confirmTitle": "Block {{name}}?",
+    "confirmBody": "You won't see each other in search or receive new requests from each other.",
+    "done": "{{name}} blocked",
+    "empty": "You haven't blocked anyone"
+  },
+  "requestStatus": {
+    "submitted": "Submitted",
+    "under_review": "Under review",
+    "matching": "Finding providers",
+    "provider_notified": "Providers notified",
+    "provider_accepted": "Provider accepted",
+    "provider_declined": "Provider declined",
+    "customer_confirmation_pending": "Choose your provider",
+    "booking_confirmed": "Booked",
+    "cancelled": "Cancelled",
+    "disputed": "Under dispute"
+  },
+  "bookingStatus": {
+    "confirmed": "Confirmed",
+    "service_started": "In progress",
+    "service_completed": "Completed",
+    "cancelled": "Cancelled",
+    "disputed": "Under dispute"
+  },
+  "invitationStatus": {
+    "invited": "New",
+    "viewed": "Seen",
+    "accepted": "Accepted",
+    "declined": "Declined",
+    "expired": "Expired",
+    "withdrawn": "Filled by someone else"
+  },
+  "applicationStatus": {
+    "draft": "In progress",
+    "submitted": "Submitted",
+    "under_review": "Under review",
+    "info_required": "More info needed",
+    "approved": "Approved",
+    "rejected": "Not approved"
+  },
+  "serviceStatus": {
+    "pending": "Pending review",
+    "approved": "Approved",
+    "rejected": "Not approved",
+    "suspended": "Suspended"
+  },
+  "documentStatus": {
+    "pending": "Awaiting review",
+    "verified": "Verified",
+    "rejected": "Rejected",
+    "info_required": "Re-upload needed"
+  },
+  "documentType": {
+    "id_proof": "Photo ID (Aadhaar, Voter ID, etc.)",
+    "address_proof": "Address proof",
+    "driving_licence": "Driving licence",
+    "police_clearance": "Police clearance certificate",
+    "qualification_certificate": "Qualification certificate",
+    "training_certificate": "Training certificate",
+    "reference_letter": "Reference letter",
+    "other": "Other document"
+  }
+}

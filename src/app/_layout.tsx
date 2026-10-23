@@ -1,18 +1,81 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
+import '@/shared/i18n';
+
+import { QueryClientProvider } from '@tanstack/react-query';
+import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useColorScheme } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import { type ReactNode, useEffect, useState } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { installMockApi } from '@/shared/api/mock';
+import { session, useSession } from '@/shared/auth/session';
+import { env } from '@/shared/config/env';
+import { restoreLocale } from '@/shared/i18n';
+import { queryClient } from '@/shared/lib/query-client';
+import { ThemeProvider, useTheme } from '@/shared/theme/theme';
 
-import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import AppTabs from '@/components/app-tabs';
+if (env.apiMode === 'mock') {
+  installMockApi();
+}
 
-SplashScreen.preventAutoHideAsync();
+SplashScreen.preventAutoHideAsync().catch(() => undefined);
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+function RootNavigator(): ReactNode {
+  const { tokens, user } = useSession();
+  const theme = useTheme();
+  const isSignedIn = Boolean(tokens && user);
+  const role = user?.role;
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <AnimatedSplashOverlay />
-      <AppTabs />
-    </ThemeProvider>
+    <>
+      <StatusBar style={theme.scheme === 'dark' ? 'light' : 'dark'} />
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: theme.colors.background },
+          headerTintColor: theme.colors.text,
+          headerStyle: { backgroundColor: theme.colors.background },
+        }}>
+        <Stack.Protected guard={isSignedIn && role === 'customer'}>
+          <Stack.Screen name="customer" />
+        </Stack.Protected>
+        <Stack.Protected guard={isSignedIn && role === 'provider'}>
+          <Stack.Screen name="provider" />
+        </Stack.Protected>
+        <Stack.Protected guard={isSignedIn}>
+          <Stack.Screen name="(account)" />
+        </Stack.Protected>
+        <Stack.Protected guard={!isSignedIn}>
+          <Stack.Screen name="(auth)" />
+        </Stack.Protected>
+        <Stack.Screen name="policy/[slug]" options={{ headerShown: true, title: '' }} />
+      </Stack>
+    </>
+  );
+}
+
+export default function RootLayout(): ReactNode {
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    Promise.all([session.hydrate(), restoreLocale()]).finally(() => {
+      setIsReady(true);
+      SplashScreen.hideAsync().catch(() => undefined);
+    });
+  }, []);
+
+  if (!isReady) {
+    return null;
+  }
+
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider>
+            <RootNavigator />
+          </ThemeProvider>
+        </QueryClientProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }

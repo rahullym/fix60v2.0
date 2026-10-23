@@ -1,0 +1,29 @@
+{
+  "generic": "Something went wrong. Please try again.",
+  "server": "Our service is having trouble. Please try again in a few minutes.",
+  "network": "No internet connection. Check your connection and try again.",
+  "validationFailed": "Some details look wrong. Please check and try again.",
+  "sessionExpired": "Your session ended. Please sign in again.",
+  "forbidden": "You can't do that.",
+  "notFound": "We couldn't find that. It may have been removed.",
+  "rateLimited": "Too many attempts. Please wait a little and try again.",
+  "conflict": "This was changed by someone else. Please refresh.",
+  "stateChanged": "This has already changed. Please refresh to see the latest.",
+  "phoneVerificationFailed": "We couldn't verify your phone number. Please try again.",
+  "appCheckFailed": "This app couldn't be verified. Please update the app.",
+  "alreadyRegistered": "This number is already registered. Please sign in.",
+  "roleMismatch": "This number is registered for the other side of Fix60. Choose the other option to sign in.",
+  "underage": "You must be at least 18 years old to work on Fix60.",
+  "consentRequired": "Please accept the required policies to continue.",
+  "accountSuspended": "Your account is suspended. Please contact support.",
+  "accountDeleted": "This account has been deleted.",
+  "uploadFailed": "The file couldn't be uploaded. Use a JPG, PNG or PDF under 5 MB.",
+  "slotUnavailable": "That time is no longer available. Please choose another.",
+  "phone": {
+    "invalid_code": "That code is incorrect. Check the SMS and try again.",
+    "code_expired": "The code expired. Request a new one.",
+    "too_many_requests": "Too many attempts. Please try again later.",
+    "invalid_phone": "Enter a valid 10-digit mobile number.",
+    "unknown": "We couldn't send the code. Please try again."
+  }
+}
