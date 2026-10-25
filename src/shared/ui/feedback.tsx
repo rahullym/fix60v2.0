@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import type { ReactNode } from 'react';
+import { type ReactNode, useState } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { errorMessageKey } from '../lib/error-copy';
@@ -171,13 +171,16 @@ export function Avatar({ uri, name, size = 48 }: { uri: string | null; name: str
     .slice(0, 2)
     .map((part) => part[0]?.toUpperCase())
     .join('');
-  if (uri) {
+  const [failedUri, setFailedUri] = useState<string | null>(null);
+  if (uri && uri !== failedUri) {
+    // Tinted background while loading; initials if the photo can't be fetched.
     return (
       <Image
         source={{ uri }}
-        style={{ width: size, height: size, borderRadius: size / 2 }}
+        style={{ width: size, height: size, borderRadius: size / 2, backgroundColor: theme.colors.primarySoft }}
         contentFit="cover"
         accessibilityLabel={name}
+        onError={() => setFailedUri(uri)}
       />
     );
   }

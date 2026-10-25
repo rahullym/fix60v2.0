@@ -39,7 +39,7 @@ export default function ProviderLayout(): ReactNode {
         <Stack.Screen name="bookings/[code]" options={{ title: t('provider:booking.title') }} />
       </Stack.Protected>
       <Stack.Protected guard={!isActive} redirectTo="/provider">
-        <Stack.Screen name="application/index" options={{ title: t('provider:application.title') }} />
+        <Stack.Screen name="application/index" options={{ title: t('provider:application.title'), headerBackVisible: false }} />
         <Stack.Screen name="application/[step]" options={{ title: '' }} />
       </Stack.Protected>
       <Stack.Screen name="documents" options={{ title: t('provider:documents.title') }} />

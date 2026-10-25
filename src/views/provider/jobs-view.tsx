@@ -9,7 +9,7 @@ import { providerKeys, useProviderMe } from '@/features/provider/model/queries';
 import { api } from '@/shared/api/endpoints';
 import { useSession } from '@/shared/auth/session';
 import { useTheme } from '@/shared/theme/theme';
-import { EmptyState, ErrorState, HeaderIconButton, LoadingState, Row, Screen, SectionHeader, Text, useLightStatusBar } from '@/shared/ui';
+import { EmptyState, ErrorState, HeaderIconButton, LoadingState, Row, Screen, SectionHeader, StatusBarScrim, Text, useLightStatusBar } from '@/shared/ui';
 import { useUnreadCount } from '@/features/notifications';
 import { ProviderBanners } from '@/widgets/provider/provider-banners';
 import { ProviderStats } from '@/widgets/provider/provider-stats';
@@ -31,52 +31,56 @@ export function JobsView(): ReactNode {
   const firstName = useSession().user?.fullName.split(' ')[0] ?? '';
 
   return (
-    <Screen
-      edges={[]}
-      onRefresh={() => {
-        void invitations.refetch();
-        void me.refetch();
-      }}
-      isRefreshing={invitations.isRefetching}>
-      <View style={[styles.hero, { backgroundColor: theme.colors.primary, paddingTop: top + 20 }]}>
-        <Row style={styles.topRow}>
-          <Text variant="caption" style={styles.heroMuted}>
-            {t('provider:jobs.heroKicker')}
+    <View style={styles.root}>
+      <Screen
+        edges={[]}
+        onRefresh={() => {
+          void invitations.refetch();
+          void me.refetch();
+        }}
+        isRefreshing={invitations.isRefetching}>
+        <View style={[styles.hero, { backgroundColor: theme.colors.primary, paddingTop: top + 20 }]}>
+          <Row style={styles.topRow}>
+            <Text variant="caption" style={styles.heroMuted}>
+              {t('provider:jobs.heroKicker')}
+            </Text>
+            <HeaderIconButton
+              icon="notifications"
+              label={t('common:notifications.title')}
+              badge={unread}
+              onPress={() => router.push('/notifications')}
+            />
+          </Row>
+          <Text variant="title" tone="onPrimary" style={styles.greeting}>
+            {t('provider:jobs.greeting', { name: firstName })} 👋
           </Text>
-          <HeaderIconButton
-            icon="notifications"
-            label={t('common:notifications.title')}
-            badge={unread}
-            onPress={() => router.push('/notifications')}
-          />
-        </Row>
-        <Text variant="title" tone="onPrimary" style={styles.greeting}>
-          {t('provider:jobs.greeting', { name: firstName })} 👋
+        </View>
+        {me.data ? <ProviderStats stats={me.data.stats} /> : null}
+        <ProviderBanners />
+        <SectionHeader title={t('provider:jobs.openTitle')} />
+        <Text variant="caption" tone="muted">
+          {t('provider:jobs.privacyHint')}
         </Text>
-      </View>
-      {me.data ? <ProviderStats stats={me.data.stats} /> : null}
-      <ProviderBanners />
-      <SectionHeader title={t('provider:jobs.openTitle')} />
-      <Text variant="caption" tone="muted">
-        {t('provider:jobs.privacyHint')}
-      </Text>
-      {invitations.isLoading ? <LoadingState /> : null}
-      {invitations.error ? <ErrorState error={invitations.error} onRetry={() => void invitations.refetch()} /> : null}
-      {!invitations.isLoading && !invitations.error && items.length === 0 ? (
-        <EmptyState icon="briefcase-outline" title={t('provider:jobs.emptyTitle')} body={t('provider:jobs.emptyBody')} />
-      ) : null}
-      {items.map((invitation) => (
-        <InvitationCard
-          key={invitation.id}
-          invitation={invitation}
-          onPress={() => router.push(`/provider/invitations/${invitation.id}`)}
-        />
-      ))}
-    </Screen>
+        {invitations.isLoading ? <LoadingState /> : null}
+        {invitations.error ? <ErrorState error={invitations.error} onRetry={() => void invitations.refetch()} /> : null}
+        {!invitations.isLoading && !invitations.error && items.length === 0 ? (
+          <EmptyState icon="briefcase-outline" title={t('provider:jobs.emptyTitle')} body={t('provider:jobs.emptyBody')} />
+        ) : null}
+        {items.map((invitation) => (
+          <InvitationCard
+            key={invitation.id}
+            invitation={invitation}
+            onPress={() => router.push(`/provider/invitations/${invitation.id}`)}
+          />
+        ))}
+      </Screen>
+      <StatusBarScrim />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  root: { flex: 1 },
   hero: {
     marginHorizontal: -16,
     marginTop: -16,

@@ -6,7 +6,7 @@ import { DEV_OTP, toIndianE164 } from '@/shared/auth/phone-auth';
 import { env } from '@/shared/config/env';
 import { errorMessageKey } from '@/shared/lib/error-copy';
 import { AuthScreen } from '@/widgets/auth/auth-header';
-import { Button, Notice, Text, TextField } from '@/shared/ui';
+import { Button, Notice, TextField } from '@/shared/ui';
 
 export function PhoneView(): ReactNode {
   const { t } = useTranslation();

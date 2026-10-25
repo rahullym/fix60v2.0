@@ -1,4 +1,3 @@
-import '@/shared/i18n';
 
 import { QueryClientProvider } from '@tanstack/react-query';
 import * as Font from 'expo-font';

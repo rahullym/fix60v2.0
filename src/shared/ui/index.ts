@@ -11,3 +11,4 @@ export { GradientIcon } from './gradient-icon';
 export { OtpInput } from './otp-input';
 export { TopTabs } from './top-tabs';
 export { SuccessScreen } from './success-screen';
+export { StatusBarScrim } from './status-bar-scrim';
