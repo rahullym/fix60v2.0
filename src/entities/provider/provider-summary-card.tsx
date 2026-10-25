@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import type { ProviderCard } from '@/shared/api/types';
 import { useLocale } from '@/shared/lib/use-locale';
 import { Avatar, Card, Row, Text } from '@/shared/ui';
@@ -31,21 +31,35 @@ export function ProviderSummaryCard({
     .join(' · ');
   const rate = format.rateLabel(provider.rates);
 
+  const label = [provider.displayName, place, rate].filter(Boolean).join(', ');
+  // With inner buttons (save heart, Choose), the card must not swallow them for screen readers:
+  // the card stays tappable by touch, and the name block is the accessible "open profile" button.
+  const hasInnerButtons = Boolean(action || footer);
+  const isHeaderButton = hasInnerButtons && Boolean(onPress);
+
   return (
-    <Card onPress={onPress} accessibilityLabel={[provider.displayName, place, rate].filter(Boolean).join(', ')}>
+    <Card onPress={onPress} accessible={!hasInnerButtons} accessibilityLabel={label}>
       <Row gap={12} style={styles.top}>
-        <Avatar uri={provider.photoUrl} name={provider.displayName} size={56} />
-        <View style={styles.flex}>
-          <Text variant="heading" numberOfLines={2}>
-            {provider.displayName}
-          </Text>
-          {place ? (
-            <Text variant="caption" tone="muted" numberOfLines={1}>
-              {place}
+        <Pressable
+          accessible={isHeaderButton}
+          accessibilityRole={isHeaderButton ? 'button' : undefined}
+          accessibilityLabel={isHeaderButton ? label : undefined}
+          disabled={!isHeaderButton}
+          onPress={onPress}
+          style={styles.header}>
+          <Avatar uri={provider.photoUrl} name={provider.displayName} size={56} />
+          <View style={styles.flex}>
+            <Text variant="heading" numberOfLines={2}>
+              {provider.displayName}
             </Text>
-          ) : null}
-          <ProviderRating averageRating={provider.averageRating} reviewCount={provider.reviewCount} />
-        </View>
+            {place ? (
+              <Text variant="caption" tone="muted" numberOfLines={1}>
+                {place}
+              </Text>
+            ) : null}
+            <ProviderRating averageRating={provider.averageRating} reviewCount={provider.reviewCount} />
+          </View>
+        </Pressable>
         {action}
       </Row>
       <ProviderBadges badges={provider.badges} />
@@ -63,4 +77,5 @@ export function ProviderSummaryCard({
 const styles = StyleSheet.create({
   flex: { flex: 1, gap: 2 },
   top: { alignItems: 'flex-start' },
+  header: { flex: 1, flexDirection: 'row', alignItems: 'flex-start', gap: 12 },
 });

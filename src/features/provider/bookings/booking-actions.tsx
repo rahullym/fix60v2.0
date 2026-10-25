@@ -4,16 +4,24 @@ import { Alert, StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { api } from '@/shared/api/endpoints';
 import type { Booking } from '@/shared/api/types';
+import { useNow } from '@/entities/invitation/countdown';
 import { errorMessageKey } from '@/shared/lib/error-copy';
+import { formatDateTime } from '@/shared/lib/format';
+import { useLocale } from '@/shared/lib/use-locale';
 import { Button, Card, Notice, Text, TextField } from '@/shared/ui';
 import { providerKeys } from '../model/queries';
 
 type Action = 'start' | 'complete' | 'cancel';
 
+/** The server accepts Start from one hour before the slot. */
+const START_WINDOW_MS = 60 * 60 * 1000;
+
 /** Start (confirmed), Complete (service_started) and Cancel with reason (confirmed only). */
 export function BookingActions({ booking }: { booking: Booking }): ReactNode {
   const { t } = useTranslation();
+  const { locale } = useLocale();
   const queryClient = useQueryClient();
+  const now = useNow(30_000);
   const [isCancelling, setIsCancelling] = useState(false);
   const [reason, setReason] = useState('');
   const [reasonError, setReasonError] = useState<string | null>(null);
@@ -56,6 +64,8 @@ export function BookingActions({ booking }: { booking: Booking }): ReactNode {
   };
 
   const canStart = booking.status === 'confirmed';
+  const startOpensAt = new Date(new Date(booking.startsAt).getTime() - START_WINDOW_MS);
+  const isTooEarly = now.getTime() < startOpensAt.getTime();
   const canComplete = booking.status === 'service_started';
   const canCancel = booking.status === 'confirmed' && booking.canCancel;
   if (!canStart && !canComplete && !canCancel) {
@@ -70,8 +80,14 @@ export function BookingActions({ booking }: { booking: Booking }): ReactNode {
           label={t('provider:booking.actions.start')}
           icon="play-outline"
           onPress={() => confirm('start')}
+          isDisabled={isTooEarly}
           isLoading={mutation.isPending && mutation.variables?.action === 'start'}
         />
+      ) : null}
+      {canStart && isTooEarly ? (
+        <Text variant="caption" tone="muted">
+          {t('provider:booking.startOpensAt', { time: formatDateTime(startOpensAt, locale) })}
+        </Text>
       ) : null}
       {canComplete ? (
         <Button

@@ -3,12 +3,19 @@ import {
   type ApplicationDraft,
   type ApplicationStepKey,
   type AvailabilityRule,
+  type AvailabilityType,
+  type DayPart,
   type DocumentType,
+  type Gender,
   type InvitationStatus,
   type ProviderApplication,
+  type ProviderRates,
+  type QualificationKind,
+  type TravelPreference,
 } from '../types';
 import { ageFrom } from '../../lib/format';
-import { db, newId, nowIso, type MockDocument, type MockProvider, type MockUser } from './db';
+import { db, newId, nowIso, type MockDocument, type MockProvider, type MockUser, type Qualification } from './db';
+import { toLanguageCodes } from './languages';
 import {
   acceptInvitation,
   declineInvitation,
@@ -40,6 +47,9 @@ const INVITATION_STATUSES: (InvitationStatus | 'open')[] = ['open', 'invited', '
 /** Steps 1–7 must be complete before submitting. */
 const REQUIRED_BEFORE_SUBMIT: ApplicationStepKey[] = APPLICATION_STEPS.slice(0, 7);
 const START_WINDOW_MS = 60 * 60 * 1000;
+const GENDERS: Gender[] = ['female', 'male', 'other', 'prefer_not_to_say'];
+const TRAVEL_PREFERENCES: TravelPreference[] = ['yes', 'no', 'depends_on_distance'];
+const QUALIFICATION_KINDS: QualificationKind[] = ['qualification', 'training', 'certification', 'work_experience'];
 
 /** Creates the provider row and draft application for a provider user if they are missing. */
 export function ensureProviderRows(user: MockUser): { provider: MockProvider; application: ProviderApplication } {
@@ -96,6 +106,9 @@ function rowsFor(userId: string): { provider: MockProvider; application: Provide
 }
 
 function validateRules(value: unknown): AvailabilityRule[] {
+  if (value === undefined || value === null) {
+    return [];
+  }
   if (!Array.isArray(value)) {
     throw invalid('rules must be an array');
   }
@@ -149,12 +162,11 @@ function validateStep(step: ApplicationStepKey, data: Record<string, unknown>, d
       for (const raw of services) {
         const entry = asObject(raw);
         if (typeof entry.serviceId !== 'string' || !chosen.includes(entry.serviceId)) throw invalid('service_details lists a service not picked in step 3');
-        asObject(entry.rates);
       }
       return;
     }
     case 'experience': {
-      if (!Array.isArray(data.languages)) throw invalid('languages must be an array');
+      if (data.languages !== undefined && data.languages !== null && !Array.isArray(data.languages)) throw invalid('languages must be an array');
       if (data.qualifications !== undefined && !Array.isArray(data.qualifications)) throw invalid('qualifications must be an array');
       return;
     }
@@ -179,6 +191,112 @@ function validateStep(step: ApplicationStepKey, data: Record<string, unknown>, d
       if (typeof data.declarationAccepted !== 'boolean') throw invalid('declarationAccepted must be a boolean');
       return;
     }
+  }
+}
+
+const DEFAULT_RATES: ProviderRates = { hourlyRate: null, dailyRate: null, monthlyRate: null, isNegotiable: false, minBookingMinutes: 60 };
+
+const nullableText = (value: unknown): string | null => (typeof value === 'string' && value.trim() !== '' ? value.trim() : null);
+const nullableNumber = (value: unknown): number | null => {
+  const number = typeof value === 'number' ? value : typeof value === 'string' && value.trim() !== '' ? Number(value) : NaN;
+  return Number.isFinite(number) ? number : null;
+};
+const stringList = <T extends string>(value: unknown): T[] => (Array.isArray(value) ? value.filter((entry): entry is T => typeof entry === 'string') : []);
+
+function normalizeRates(value: unknown): ProviderRates {
+  const rates = typeof value === 'object' && value !== null && !Array.isArray(value) ? (value as Record<string, unknown>) : {};
+  return {
+    hourlyRate: nullableNumber(rates.hourlyRate),
+    dailyRate: nullableNumber(rates.dailyRate),
+    monthlyRate: nullableNumber(rates.monthlyRate),
+    isNegotiable: rates.isNegotiable === true,
+    minBookingMinutes: nullableNumber(rates.minBookingMinutes) ?? DEFAULT_RATES.minBookingMinutes,
+  };
+}
+
+function normalizeAnswers(value: unknown): Record<string, string | number | boolean | string[]> {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) return {};
+  const answers: Record<string, string | number | boolean | string[]> = {};
+  for (const [key, answer] of Object.entries(value)) {
+    if (typeof answer === 'string' || typeof answer === 'number' || typeof answer === 'boolean') answers[key] = answer;
+    else if (Array.isArray(answer)) answers[key] = answer.filter((entry): entry is string => typeof entry === 'string');
+  }
+  return answers;
+}
+
+function normalizeQualifications(value: unknown): Qualification[] {
+  if (!Array.isArray(value)) return [];
+  return value
+    .filter((entry): entry is Record<string, unknown> => typeof entry === 'object' && entry !== null)
+    .map((entry) => ({
+      kind: (QUALIFICATION_KINDS as string[]).includes(entry.kind as string) ? (entry.kind as QualificationKind) : 'qualification',
+      title: nullableText(entry.title) ?? '',
+      issuer: nullableText(entry.issuer),
+      year: nullableNumber(entry.year),
+    }))
+    .filter((entry) => entry.title !== '');
+}
+
+/** Validated step data with every optional field filled, so later reads never meet `undefined`. */
+function normalizeStep(step: ApplicationStepKey, data: Record<string, unknown>, draft: ApplicationDraft): unknown {
+  switch (step) {
+    case 'personal':
+      return {
+        fullName: requireText(data.fullName, 'fullName', 120),
+        dateOfBirth: data.dateOfBirth as string,
+        gender: GENDERS.includes(data.gender as Gender) ? (data.gender as Gender) : null,
+        whatsappPhone: nullableText(data.whatsappPhone),
+        email: nullableText(data.email),
+      } satisfies NonNullable<ApplicationDraft['personal']>;
+    case 'location':
+      return {
+        districtId: data.districtId as string,
+        localityId: data.localityId as string,
+        addressNote: nullableText(data.addressNote),
+      } satisfies NonNullable<ApplicationDraft['location']>;
+    case 'services':
+      return { serviceIds: [...new Set(stringList(data.serviceIds))] } satisfies NonNullable<ApplicationDraft['services']>;
+    case 'service_details': {
+      const chosen = draft.services?.serviceIds ?? [];
+      const services = (Array.isArray(data.services) ? data.services : [])
+        .map((raw) => asObject(raw))
+        .filter((entry) => typeof entry.serviceId === 'string' && chosen.includes(entry.serviceId))
+        .map((entry) => ({
+          serviceId: entry.serviceId as string,
+          yearsExperience: nullableNumber(entry.yearsExperience),
+          rates: normalizeRates(entry.rates),
+          answers: normalizeAnswers(entry.answers),
+        }));
+      return { services } satisfies NonNullable<ApplicationDraft['service_details']>;
+    }
+    case 'experience':
+      return {
+        yearsExperience: nullableNumber(data.yearsExperience),
+        bio: nullableText(data.bio),
+        previousWork: nullableText(data.previousWork),
+        languages: toLanguageCodes(data.languages),
+        qualifications: normalizeQualifications(data.qualifications),
+      } satisfies NonNullable<ApplicationDraft['experience']>;
+    case 'service_area':
+      return {
+        latitude: nullableNumber(data.latitude) ?? 0,
+        longitude: nullableNumber(data.longitude) ?? 0,
+        radiusKm: nullableNumber(data.radiusKm) ?? 10,
+        travelPreference: TRAVEL_PREFERENCES.includes(data.travelPreference as TravelPreference)
+          ? (data.travelPreference as TravelPreference)
+          : 'depends_on_distance',
+      } satisfies NonNullable<ApplicationDraft['service_area']>;
+    case 'availability':
+      return {
+        availabilityTypes: stringList<AvailabilityType>(data.availabilityTypes),
+        dayParts: stringList<DayPart>(data.dayParts),
+        maxHoursPerDay: validateMaxHours(data.maxHoursPerDay),
+        rules: validateRules(data.rules),
+      } satisfies NonNullable<ApplicationDraft['availability']>;
+    case 'documents':
+      return { acknowledged: data.acknowledged === true } satisfies NonNullable<ApplicationDraft['documents']>;
+    case 'review':
+      return { declarationAccepted: data.declarationAccepted === true } satisfies NonNullable<ApplicationDraft['review']>;
   }
 }
 
@@ -259,7 +377,9 @@ export function registerProviderRoutes(): void {
     requireEditable(application);
     const data = asObject(asObject(context.body).data);
     validateStep(step, data, application.draft);
-    (application.draft as Record<ApplicationStepKey, unknown>)[step] = data;
+    (application.draft as Record<ApplicationStepKey, unknown>)[step] = normalizeStep(step, data, application.draft);
+    // Saving a step answers the reviewer's note for it; status stays info_required until submit.
+    application.infoRequests = application.infoRequests.filter((request) => request.step !== step);
     if (!application.completedSteps.includes(step)) {
       application.completedSteps.push(step);
       application.completedSteps.sort((a, b) => APPLICATION_STEPS.indexOf(a) - APPLICATION_STEPS.indexOf(b));

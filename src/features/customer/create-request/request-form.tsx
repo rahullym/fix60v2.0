@@ -26,7 +26,7 @@ import {
 } from '@/shared/ui';
 import { LocationFields } from '../location/location-fields';
 import { customerKeys, invalidateRoots } from '../model/query-keys';
-import { dateFromIso, dateFromSlot, toClockTime, toIsoDate, todayIso, tomorrowIso } from '../model/slot';
+import { clockFromPicker, isoFromPicker, pickerDateFromIso, pickerDateFromSlot, todayIso, tomorrowIso } from '../model/slot';
 import { useCatalog } from '../model/use-catalog';
 import { REQUEST_LIMITS, validateRequest, type RequestDraft, type RequestField } from './validate-request';
 
@@ -118,7 +118,8 @@ export function RequestForm({
   const selectedServiceName =
     serviceOptions.find((option) => option.value === draft.serviceId)?.label ?? pick(catalog.serviceById(draft.serviceId)?.name);
   const directedRate = directedServices.find((item) => item.service.id === draft.serviceId)?.rates;
-  const timeDate = draft.date && draft.startTime ? dateFromSlot(draft.date, draft.startTime) : null;
+  const timeDate = draft.date && draft.startTime ? pickerDateFromSlot(draft.date, draft.startTime) : null;
+  const timeLabel = draft.date && draft.startTime ? formatTime(`${draft.date}T${draft.startTime}:00+05:30`, locale) : null;
   const hasErrors = Object.keys(errors).length > 0;
 
   return (
@@ -173,18 +174,18 @@ export function RequestForm({
       <DateTimeField
         label={t('customer:form.date')}
         mode="date"
-        value={draft.date ? dateFromIso(draft.date) : null}
+        value={draft.date ? pickerDateFromIso(draft.date) : null}
         displayValue={draft.date ? formatDate(draft.date, locale) : null}
-        minimumDate={dateFromIso(todayIso())}
-        onChange={(next) => update({ date: toIsoDate(next) })}
+        minimumDate={pickerDateFromIso(todayIso())}
+        onChange={(next) => update({ date: isoFromPicker(next) })}
         error={errorText('date')}
       />
       <DateTimeField
         label={t('customer:form.startTime')}
         mode="time"
         value={timeDate}
-        displayValue={timeDate ? formatTime(timeDate, locale) : null}
-        onChange={(next) => update({ startTime: toClockTime(next) })}
+        displayValue={timeLabel}
+        onChange={(next) => update({ startTime: clockFromPicker(next) })}
         error={errorText('startTime')}
       />
       <View>
@@ -240,7 +241,7 @@ export function RequestForm({
         value={draft.whatsappText}
         onChangeText={(whatsappText) => update({ whatsappText })}
         keyboardType="phone-pad"
-        prefix="+91"
+        prefix="🇮🇳 +91"
         maxLength={14}
         placeholder={t('customer:form.whatsappPlaceholder')}
         error={errorText('whatsappText')}

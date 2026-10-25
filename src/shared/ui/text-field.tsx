@@ -26,7 +26,7 @@ export function TextField({ ref, label, error, hint, prefix, multiline, ...rest 
             borderColor: error ? theme.colors.danger : theme.colors.border,
             backgroundColor: theme.colors.surface,
             borderRadius: theme.radius.md,
-            minHeight: multiline ? 96 : 52,
+            minHeight: multiline ? 104 : 48,
             alignItems: multiline ? 'flex-start' : 'center',
           },
         ]}>
@@ -41,7 +41,7 @@ export function TextField({ ref, label, error, hint, prefix, multiline, ...rest 
           placeholderTextColor={theme.colors.textMuted}
           multiline={multiline}
           textAlignVertical={multiline ? 'top' : 'center'}
-          style={[styles.input, { color: theme.colors.text, fontFamily: theme.font.body }]}
+          style={[styles.input, { color: theme.colors.text, fontFamily: theme.font.medium }]}
           {...rest}
         />
       </View>

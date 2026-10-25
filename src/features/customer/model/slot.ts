@@ -11,6 +11,32 @@ export function dateFromSlot(date: IsoDate, time: ClockTime): Date {
   return new Date(`${date}T${time}:00+05:30`);
 }
 
+/**
+ * Native pickers show device-local wall time. These build a picker Date whose local
+ * fields equal the IST date/time, and read the picked value back from local fields,
+ * so the picker is correct on devices outside Asia/Kolkata.
+ */
+export function pickerDateFromIso(date: IsoDate): Date {
+  const [y, m, d] = date.split('-').map(Number) as [number, number, number];
+  return new Date(y, m - 1, d, 0, 0);
+}
+
+export function pickerDateFromSlot(date: IsoDate, time: ClockTime): Date {
+  const [y, m, d] = date.split('-').map(Number) as [number, number, number];
+  const [hh, mm] = time.split(':').map(Number) as [number, number];
+  return new Date(y, m - 1, d, hh, mm);
+}
+
+const pad = (value: number): string => String(value).padStart(2, '0');
+
+export function isoFromPicker(value: Date): IsoDate {
+  return `${value.getFullYear()}-${pad(value.getMonth() + 1)}-${pad(value.getDate())}`;
+}
+
+export function clockFromPicker(value: Date): ClockTime {
+  return `${pad(value.getHours())}:${pad(value.getMinutes())}`;
+}
+
 export function todayIso(): IsoDate {
   return toIsoDate(new Date());
 }

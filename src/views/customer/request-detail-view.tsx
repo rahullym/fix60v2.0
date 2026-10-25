@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { router, Stack, useLocalSearchParams } from 'expo-router';
+import { router, Stack, useIsFocused, useLocalSearchParams } from 'expo-router';
 import { type ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
@@ -25,6 +25,7 @@ const WAITING: RequestStatus[] = [
   'provider_accepted',
   'customer_confirmation_pending',
 ];
+const NOT_CANCELLABLE: RequestStatus[] = ['booking_confirmed', 'cancelled', 'disputed'];
 const CHOOSING: RequestStatus[] = ['provider_accepted', 'customer_confirmation_pending'];
 const DIRECTED_HELP: RequestStatus[] = ['provider_notified', 'provider_accepted', 'provider_declined', 'customer_confirmation_pending'];
 
@@ -41,11 +42,13 @@ export function RequestDetailView(): ReactNode {
   const client = useQueryClient();
   const { code } = useLocalSearchParams<{ code: string }>();
   const [isCancelOpen, setIsCancelOpen] = useState(false);
+  const isFocused = useIsFocused();
 
   const query = useQuery({
     queryKey: customerKeys.request(code),
     queryFn: () => api.requests.get(code),
-    refetchInterval: (current) => (current.state.data && WAITING.includes(current.state.data.status) ? 10_000 : false),
+    refetchInterval: (current) =>
+      isFocused && current.state.data && WAITING.includes(current.state.data.status) ? 10_000 : false,
   });
   useRefetchOnFocus(query.refetch);
 
@@ -62,7 +65,7 @@ export function RequestDetailView(): ReactNode {
   if (!request) return <ErrorState error={query.error} onRetry={query.refetch} />;
 
   const isChoosing = CHOOSING.includes(request.status);
-  const canCancel = request.status !== 'booking_confirmed' && request.status !== 'cancelled';
+  const canCancel = !NOT_CANCELLABLE.includes(request.status);
   const isDirectedDeclined = request.source === 'directed' && request.status === 'provider_declined';
   const isWaiting = WAITING.includes(request.status) && !isChoosing;
 

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { router } from 'expo-router';
+import { router, Stack } from 'expo-router';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ProviderSummaryCard } from '@/entities/provider/provider-summary-card';
@@ -18,6 +18,7 @@ export function SavedView(): ReactNode {
 
   return (
     <Screen onRefresh={query.refetch} isRefreshing={query.isRefetching}>
+      <Stack.Screen options={{ title: t('customer:tabs.savedProviders') }} />
       {query.isLoading ? (
         <LoadingState />
       ) : query.isError ? (

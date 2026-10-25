@@ -34,7 +34,7 @@ export function Button({
   const palette: Record<ButtonVariant, { bg: string; fg: string; border: string }> = {
     primary: { bg: theme.colors.primary, fg: theme.colors.onPrimary, border: theme.colors.primary },
     accent: { bg: theme.colors.accent, fg: theme.colors.onPrimary, border: theme.colors.accent },
-    secondary: { bg: theme.colors.surface, fg: theme.colors.text, border: theme.colors.border },
+    secondary: { bg: theme.colors.surface, fg: theme.colors.primary, border: theme.colors.primary },
     ghost: { bg: 'transparent', fg: theme.colors.primary, border: 'transparent' },
     danger: { bg: theme.colors.danger, fg: theme.colors.onPrimary, border: theme.colors.danger },
   };
@@ -51,11 +51,11 @@ export function Button({
       style={({ pressed }) => [
         styles.base,
         {
-          minHeight: isCompact ? 48 : 52,
-          paddingHorizontal: isCompact ? 14 : 20,
+          minHeight: isCompact ? 48 : 56,
+          paddingHorizontal: isCompact ? 18 : 24,
           backgroundColor: colors.bg,
           borderColor: colors.border,
-          borderRadius: theme.radius.md,
+          borderRadius: theme.radius.pill,
           opacity: isInactive ? 0.55 : pressed ? 0.85 : 1,
         },
         style,
@@ -65,7 +65,7 @@ export function Button({
       ) : (
         <View style={styles.content}>
           {icon ? <Icon name={icon} size={18} color={colors.fg} /> : null}
-          <Text variant="bodyStrong" style={{ color: colors.fg }} numberOfLines={1}>
+          <Text variant="bodyStrong" style={{ color: colors.fg, fontSize: 16 }} numberOfLines={1}>
             {label}
           </Text>
         </View>

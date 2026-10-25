@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { type ReactNode, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { ServiceQuestion } from '@/shared/api/types';
@@ -25,6 +25,41 @@ function GroupLabel({ label, help, error }: { label: string; help: string; error
         </Text>
       ) : null}
     </>
+  );
+}
+
+/** Numeric answer that keeps the typed text (so "2." can become "2.5"). */
+function NumberQuestion({
+  label,
+  help,
+  value,
+  onChange,
+  error,
+  isEditable,
+}: {
+  label: string;
+  help: string;
+  value: AnswerValue | undefined;
+  onChange: (value: AnswerValue | undefined) => void;
+  error: string | null;
+  isEditable: boolean;
+}): ReactNode {
+  const [text, setText] = useState(typeof value === 'number' ? String(value) : '');
+  return (
+    <TextField
+      label={label}
+      hint={help || undefined}
+      value={text}
+      onChangeText={(raw) => {
+        const cleaned = raw.replace(/[^\d.]/g, '').replace(/(\..*)\./g, '$1');
+        setText(cleaned);
+        const parsed = Number(cleaned);
+        onChange(cleaned && cleaned !== '.' && Number.isFinite(parsed) ? parsed : undefined);
+      }}
+      keyboardType="decimal-pad"
+      editable={isEditable}
+      error={error}
+    />
   );
 }
 
@@ -64,21 +99,7 @@ export function QuestionField({
         />
       );
     case 'number':
-      return (
-        <TextField
-          label={label}
-          hint={help || undefined}
-          value={typeof value === 'number' ? String(value) : ''}
-          onChangeText={(text) => {
-            const digits = text.replace(/[^\d.]/g, '');
-            const parsed = Number(digits);
-            onChange(digits && Number.isFinite(parsed) ? parsed : undefined);
-          }}
-          keyboardType="numeric"
-          editable={isEditable}
-          error={error}
-        />
-      );
+      return <NumberQuestion label={label} help={help} value={value} onChange={onChange} error={error} isEditable={isEditable} />;
     case 'date':
       return (
         <DateTimeField
@@ -86,7 +107,7 @@ export function QuestionField({
           mode="date"
           value={typeof value === 'string' && value ? new Date(`${value}T00:00:00+05:30`) : null}
           displayValue={typeof value === 'string' && value ? formatDate(value, locale) : null}
-          onChange={(date) => onChange(toIsoDate(date))}
+          onChange={(date) => (isEditable ? onChange(toIsoDate(date)) : undefined)}
           error={error}
         />
       );

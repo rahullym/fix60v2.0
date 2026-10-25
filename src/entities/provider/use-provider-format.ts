@@ -28,7 +28,7 @@ export function useProviderFormat(): ProviderFormat {
     return labels;
   };
 
-  const languageLabel = (code: string): string => t(`customer:languages.${code}`, { defaultValue: code.toUpperCase() });
+  const languageLabel = (code: string): string => t(`common:languages.${code}`, { defaultValue: code });
 
   return {
     rateLabel: (rates) => {

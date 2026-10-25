@@ -1,6 +1,7 @@
 import { Stack } from 'expo-router';
 import type { ReactNode } from 'react';
 import { useTheme } from '@/shared/theme/theme';
+import { blueStackHeader } from '@/shared/ui/stack-header';
 
 /** Customer area: the tab group plus pushed detail screens (titles are set by each view). */
 export default function CustomerLayout(): ReactNode {
@@ -8,12 +9,7 @@ export default function CustomerLayout(): ReactNode {
   return (
     <Stack
       screenOptions={{
-        headerShown: true,
-        headerTitle: '',
-        headerShadowVisible: false,
-        headerBackButtonDisplayMode: 'minimal',
-        headerTintColor: theme.colors.text,
-        headerStyle: { backgroundColor: theme.colors.background },
+        ...blueStackHeader,
         contentStyle: { backgroundColor: theme.colors.background },
       }}>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

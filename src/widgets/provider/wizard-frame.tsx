@@ -17,6 +17,7 @@ export function WizardFrame({
   saveError,
   continueLabel,
   hasFieldErrors = false,
+  isContinueDisabled = false,
   children,
 }: {
   step: ApplicationStepKey;
@@ -27,6 +28,7 @@ export function WizardFrame({
   saveError: unknown;
   continueLabel?: string;
   hasFieldErrors?: boolean;
+  isContinueDisabled?: boolean;
   children: ReactNode;
 }): ReactNode {
   const { t } = useTranslation();
@@ -37,7 +39,7 @@ export function WizardFrame({
     <Screen
       footer={
         isEditable ? (
-          <Button label={continueLabel ?? t('common:actions.saveAndContinue')} onPress={onContinue} isLoading={isSaving} />
+          <Button label={continueLabel ?? t('common:actions.saveAndContinue')} onPress={onContinue} isLoading={isSaving} isDisabled={isContinueDisabled} />
         ) : undefined
       }>
       <View

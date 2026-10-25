@@ -17,7 +17,7 @@ const config: ExpoConfig = {
   orientation: 'portrait',
   icon: './assets/images/icon.png',
   scheme: 'fix60',
-  userInterfaceStyle: 'automatic',
+  userInterfaceStyle: 'light',
   ios: {
     bundleIdentifier: IOS_BUNDLE_ID,
     googleServicesFile: existsSync(iosServicesFile) ? iosServicesFile : undefined,
@@ -31,7 +31,7 @@ const config: ExpoConfig = {
     package: ANDROID_PACKAGE,
     googleServicesFile: existsSync(androidServicesFile) ? androidServicesFile : undefined,
     adaptiveIcon: {
-      backgroundColor: '#1F2937',
+      backgroundColor: '#FFFFFF',
       foregroundImage: './assets/images/android-icon-foreground.png',
       backgroundImage: './assets/images/android-icon-background.png',
       monochromeImage: './assets/images/android-icon-monochrome.png',
@@ -41,9 +41,10 @@ const config: ExpoConfig = {
   },
   plugins: [
     'expo-router',
-    ['expo-splash-screen', { backgroundColor: '#1F2937', image: './assets/images/splash-icon.png', imageWidth: 76 }],
+    ['expo-splash-screen', { backgroundColor: '#FFFFFF', image: './assets/images/splash-icon.png', imageWidth: 220 }],
     'expo-secure-store',
     'expo-localization',
+    ['expo-font', { fonts: ['./assets/fonts/PlusJakartaSans-Regular.ttf', './assets/fonts/PlusJakartaSans-Medium.ttf', './assets/fonts/PlusJakartaSans-SemiBold.ttf', './assets/fonts/PlusJakartaSans-Bold.ttf', './assets/fonts/PlusJakartaSans-ExtraBold.ttf'] }],
     ['expo-location', { locationWhenInUsePermission: 'Fix60 uses your location to find service providers near you.' }],
     ['expo-image-picker', { photosPermission: 'Fix60 lets you choose documents and photos from your library.', cameraPermission: 'Fix60 uses the camera to photograph verification documents.' }],
     '@react-native-community/datetimepicker',

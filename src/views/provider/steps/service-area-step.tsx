@@ -51,15 +51,18 @@ export function ServiceAreaStep({ application, isEditable, returnTo }: StepProps
   });
   const locality = localities.data?.items.find((item) => item.id === location?.localityId) ?? null;
 
-  const [deviceCenter, setDeviceCenter] = useState<{ latitude: number; longitude: number } | null>(null);
+  const [picked, setPicked] = useState<{ center: { latitude: number; longitude: number }; source: 'device' | 'locality' } | null>(null);
   const [radiusKm, setRadiusKm] = useState(draft?.radiusKm ?? 10);
   const [travel, setTravel] = useState<TravelPreference>(draft?.travelPreference ?? 'depends_on_distance');
   const [isLocating, setIsLocating] = useState(false);
   const [locateFailure, setLocateFailure] = useState<LocateFailure>(null);
   const [errors, setErrors] = useState<FieldErrors>({});
 
-  const center = deviceCenter ?? (draft ? { latitude: draft.latitude, longitude: draft.longitude } : null) ?? (locality ? { latitude: locality.latitude, longitude: locality.longitude } : null);
-  const source: CenterSource | null = deviceCenter ? 'device' : draft ? 'draft' : locality ? 'locality' : null;
+  const center =
+    picked?.center ??
+    (draft ? { latitude: draft.latitude, longitude: draft.longitude } : null) ??
+    (locality ? { latitude: locality.latitude, longitude: locality.longitude } : null);
+  const source: CenterSource | null = picked ? picked.source : draft ? 'draft' : locality ? 'locality' : null;
 
   const locateMe = async (): Promise<void> => {
     setLocateFailure(null);
@@ -67,7 +70,7 @@ export function ServiceAreaStep({ application, isEditable, returnTo }: StepProps
     const result = await readDeviceCenter();
     setIsLocating(false);
     if (result.ok) {
-      setDeviceCenter(result.center);
+      setPicked({ center: result.center, source: 'device' });
     } else {
       setLocateFailure(result.reason);
     }
@@ -75,7 +78,7 @@ export function ServiceAreaStep({ application, isEditable, returnTo }: StepProps
 
   const applyLocality = (): void => {
     if (locality) {
-      setDeviceCenter({ latitude: locality.latitude, longitude: locality.longitude });
+      setPicked({ center: { latitude: locality.latitude, longitude: locality.longitude }, source: 'locality' });
     }
   };
 
@@ -109,7 +112,11 @@ export function ServiceAreaStep({ application, isEditable, returnTo }: StepProps
         {center ? (
           <>
             <Text variant="bodyStrong">
-              {source === 'device' ? t('provider:serviceArea.fromDevice') : locality ? pick(locality.name) : t('provider:serviceArea.savedCentre')}
+              {source === 'device'
+                ? t('provider:serviceArea.fromDevice')
+                : source === 'locality' && locality
+                  ? pick(locality.name)
+                  : t('provider:serviceArea.savedCentre')}
             </Text>
             <Text variant="caption" tone="muted">
               {t('provider:serviceArea.coords', { lat: center.latitude.toFixed(4), lng: center.longitude.toFixed(4) })}
@@ -150,7 +157,7 @@ export function ServiceAreaStep({ application, isEditable, returnTo }: StepProps
         onChange={(value) => isEditable && setRadiusKm(value)}
         min={RADIUS_RANGE.min}
         max={RADIUS_RANGE.max}
-        suffix="km"
+        suffix={t('provider:units.km')}
       />
       <Text variant="caption" tone="muted" accessibilityLiveRegion="polite">
         {t('provider:serviceArea.radiusSummary', {

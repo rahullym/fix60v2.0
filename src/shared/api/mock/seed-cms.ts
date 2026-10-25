@@ -1,22 +1,22 @@
 import type { OrganizationSettings, PolicySlug, PublicBranding } from '../types';
 import { db, newId, nowIso } from './db';
 
-/** Live branding served by `GET /branding` (graphite-signal theme). */
+/** Live branding served by `GET /branding`: the original Fix60 blue palette. */
 export const BRANDING: PublicBranding = {
   name: 'Fix60',
   logoUrl: null,
   theme: {
-    primary: '#1F2937',
-    primaryMid: '#374151',
-    primaryLight: '#E5E7EB',
-    accent: '#F97316',
-    accentLight: '#FFEDD5',
-    railMid: '#111827',
-    railDeep: '#030712',
-    tintSecondary: '#F3F4F6',
-    tintTertiary: '#F9FAFB',
-    surfaceMuted: '#F4F4F5',
-    surfaceFog: '#FAFAFA',
+    primary: '#0000FF',
+    primaryMid: '#4242FF',
+    primaryLight: '#E0F2FE',
+    accent: '#FF6B35',
+    accentLight: '#FFF1EA',
+    railMid: '#1E293B',
+    railDeep: '#0F172A',
+    tintSecondary: '#F0F7FF',
+    tintTertiary: '#F8FAFC',
+    surfaceMuted: '#F1F5F9',
+    surfaceFog: '#F8FAFB',
   },
 };
 
@@ -45,7 +45,7 @@ const PAGES: PageSeed[] = [
     title: ['Terms of use (DRAFT)', 'ഉപയോഗ നിബന്ധനകൾ (കരട്)'],
     sections: [
       {
-        en: ['About Fix60', 'Fix60 connects households in Kerala with independent, verified home-assistance providers. Fix60 is a platform and is not the employer of providers.'],
+        en: ['About Fix60', 'Fix60 connects households in Kerala with independent, verified service providers. Fix60 is a platform and is not the employer of providers.'],
         ml: ['Fix60-നെക്കുറിച്ച്', 'കേരളത്തിലെ വീടുകളെ പരിശോധിച്ച സ്വതന്ത്ര സേവനദാതാക്കളുമായി Fix60 ബന്ധിപ്പിക്കുന്നു. Fix60 ഒരു പ്ലാറ്റ്‌ഫോം മാത്രമാണ്; സേവനദാതാക്കളുടെ തൊഴിലുടമയല്ല.'],
       },
       {
@@ -81,8 +81,8 @@ const PAGES: PageSeed[] = [
     title: ['Safety policy (DRAFT)', 'സുരക്ഷാ നയം (കരട്)'],
     sections: [
       {
-        en: ['Verification', 'Providers submit ID proof and, for care services, a police clearance certificate before they can accept work.'],
-        ml: ['പരിശോധന', 'ജോലി സ്വീകരിക്കുന്നതിനു മുൻപ് സേവനദാതാക്കൾ തിരിച്ചറിയൽ രേഖയും, പരിചരണ സേവനങ്ങൾക്ക് പോലീസ് ക്ലിയറൻസ് സർട്ടിഫിക്കറ്റും സമർപ്പിക്കുന്നു.'],
+        en: ['Verification', 'Providers submit ID proof before they can accept work. Drivers add a driving licence, and patient-support and childcare providers a police clearance certificate.'],
+        ml: ['പരിശോധന', 'ജോലി സ്വീകരിക്കുന്നതിനു മുൻപ് സേവനദാതാക്കൾ തിരിച്ചറിയൽ രേഖ സമർപ്പിക്കുന്നു. ഡ്രൈവർമാർ ഡ്രൈവിംഗ് ലൈസൻസും, രോഗീ സഹായ-ശിശുപരിചരണ സേവനദാതാക്കൾ പോലീസ് ക്ലിയറൻസ് സർട്ടിഫിക്കറ്റും നൽകുന്നു.'],
       },
       {
         en: ['Report and block', 'If anyone makes you feel unsafe, use Report or Block from their profile or booking. In an emergency call 112.'],
@@ -109,8 +109,8 @@ const PAGES: PageSeed[] = [
     title: ['About Fix60 (DRAFT)', 'Fix60-നെക്കുറിച്ച് (കരട്)'],
     sections: [
       {
-        en: ['Help at home, within the hour', 'Fix60 helps families across Kerala find trusted help for cleaning, cooking, care and driving.'],
-        ml: ['വീട്ടിൽ സഹായം, വേഗത്തിൽ', 'ശുചീകരണം, പാചകം, പരിചരണം, ഡ്രൈവിംഗ് എന്നിവയ്ക്ക് വിശ്വസ്ത സഹായം കണ്ടെത്താൻ Fix60 കേരളത്തിലെ കുടുംബങ്ങളെ സഹായിക്കുന്നു.'],
+        en: ['Help at home, within the hour', 'Fix60 helps families across Kerala find trusted help for transport, patient support, daily errands, home services, personal care, childcare and homemade food.'],
+        ml: ['വീട്ടിൽ സഹായം, വേഗത്തിൽ', 'യാത്ര, രോഗീ സഹായം, ദൈനംദിന ആവശ്യങ്ങൾ, വീട്ടു സേവനങ്ങൾ, വ്യക്തിഗത പരിചരണം, ശിശുപരിചരണം, വീട്ടുഭക്ഷണം എന്നിവയ്ക്ക് വിശ്വസ്ത സഹായം കണ്ടെത്താൻ Fix60 കേരളത്തിലെ കുടുംബങ്ങളെ സഹായിക്കുന്നു.'],
       },
     ],
   },
@@ -137,12 +137,12 @@ export function seedCms(): void {
   }
 
   const customerBanners: [string, string, string, string, string][] = [
-    ['Festival-ready homes', 'ഉത്സവത്തിനൊരുങ്ങിയ വീട്', 'Book a verified deep clean before Onam.', 'ഓണത്തിനു മുൻപ് പരിശോധിച്ച ഡീപ് ക്ലീനിംഗ് ബുക്ക് ചെയ്യൂ.', '/customer/services/deep-cleaning'],
-    ['Care for your parents', 'മാതാപിതാക്കൾക്ക് കരുതൽ', 'Police-verified elder care near you.', 'സമീപത്തുള്ള പോലീസ് പരിശോധിച്ച വയോജന പരിചാരകർ.', '/customer/services/elder-care'],
-    ['A cleaner home every week', 'എല്ലാ ആഴ്ചയും വൃത്തിയുള്ള വീട്', 'House cleaning from ₹200 an hour.', 'മണിക്കൂറിന് ₹200 മുതൽ വീട് വൃത്തിയാക്കൽ.', '/customer/services/house-cleaning'],
+    ['Festival-ready homes', 'ഉത്സവത്തിനൊരുങ്ങിയ വീട്', 'Book verified home cleaning before Onam, from ₹200 an hour.', 'ഓണത്തിനു മുൻപ് പരിശോധിച്ച വീട് ശുചീകരണം ബുക്ക് ചെയ്യൂ, മണിക്കൂറിന് ₹200 മുതൽ.', '/customer/services/cleaning'],
+    ['Care for your parents', 'മാതാപിതാക്കൾക്ക് കരുതൽ', 'Police-verified patient companions near you.', 'സമീപത്തുള്ള പോലീസ് പരിശോധിച്ച രോഗീ സഹായികൾ.', '/customer/categories/patient-support'],
+    ['A driver when you need one', 'ആവശ്യമുള്ളപ്പോൾ ഒരു ഡ്രൈവർ', 'Licensed drivers for hospital visits, airport runs and shopping.', 'ആശുപത്രി, വിമാനത്താവളം, ഷോപ്പിംഗ് യാത്രകൾക്ക് ലൈസൻസുള്ള ഡ്രൈവർമാർ.', '/customer/categories/transport'],
   ];
   const providerBanners: [string, string, string, string, string | null][] = [
-    ['Complete your profile', 'പ്രൊഫൈൽ പൂർത്തിയാക്കൂ', 'Verified providers with full profiles get more invitations.', 'പൂർണ്ണ പ്രൊഫൈലുള്ള പരിശോധിച്ച സേവനദാതാക്കൾക്ക് കൂടുതൽ ക്ഷണങ്ങൾ ലഭിക്കും.', '/provider'],
+    ['Complete your profile', 'പ്രൊഫൈൽ പൂർത്തിയാക്കൂ', 'Verified providers with full profiles get more invitations.', 'പൂർണ്ണ പ്രൊഫൈലുള്ള പരിശോധിച്ച സേവനദാതാക്കൾക്ക് കൂടുതൽ ക്ഷണങ്ങൾ ലഭിക്കും.', '/provider/profile'],
     ['Respond fast', 'വേഗം മറുപടി നൽകൂ', 'Invitations expire in 2 hours. Accept early to be picked.', 'ക്ഷണങ്ങൾ 2 മണിക്കൂറിൽ കാലഹരണപ്പെടും. തിരഞ്ഞെടുക്കപ്പെടാൻ നേരത്തെ സ്വീകരിക്കൂ.', null],
   ];
   for (const [en, ml, bodyEn, bodyMl, linkPath] of customerBanners) {
@@ -153,7 +153,7 @@ export function seedCms(): void {
   }
 
   const customerFaqs: [string, string, string, string][] = [
-    ['How are providers verified?', 'സേവനദാതാക്കളെ എങ്ങനെ പരിശോധിക്കുന്നു?', 'Every provider submits ID proof, and care providers also submit a police clearance certificate. Our team reviews each application.', 'എല്ലാ സേവനദാതാക്കളും തിരിച്ചറിയൽ രേഖ സമർപ്പിക്കുന്നു; പരിചാരകർ പോലീസ് ക്ലിയറൻസ് സർട്ടിഫിക്കറ്റും. ഓരോ അപേക്ഷയും ഞങ്ങളുടെ ടീം പരിശോധിക്കുന്നു.'],
+    ['How are providers verified?', 'സേവനദാതാക്കളെ എങ്ങനെ പരിശോധിക്കുന്നു?', 'Every provider submits ID proof. Drivers also submit a driving licence, and patient-support and childcare providers a police clearance certificate. Our team reviews each application.', 'എല്ലാ സേവനദാതാക്കളും തിരിച്ചറിയൽ രേഖ സമർപ്പിക്കുന്നു. ഡ്രൈവർമാർ ഡ്രൈവിംഗ് ലൈസൻസും, രോഗീ സഹായ-ശിശുപരിചരണ സേവനദാതാക്കൾ പോലീസ് ക്ലിയറൻസ് സർട്ടിഫിക്കറ്റും നൽകുന്നു. ഓരോ അപേക്ഷയും ഞങ്ങളുടെ ടീം പരിശോധിക്കുന്നു.'],
     ['How do I pay?', 'എങ്ങനെ പണം നൽകാം?', 'Pay the provider directly at the agreed rate once the work is done.', 'ജോലി കഴിഞ്ഞശേഷം തീരുമാനിച്ച നിരക്കിൽ സേവനദാതാവിന് നേരിട്ട് പണം നൽകുക.'],
     ['Can I cancel a booking?', 'ബുക്കിംഗ് റദ്ദാക്കാമോ?', 'Yes. Open the booking and tap Cancel before the service starts.', 'ഉവ്വ്. സേവനം തുടങ്ങുന്നതിനു മുൻപ് ബുക്കിംഗ് തുറന്ന് റദ്ദാക്കുക അമർത്തുക.'],
   ];

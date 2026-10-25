@@ -7,10 +7,16 @@ import type { ApiErrorBody, AuthTokens } from './types';
 let transport: Transport = createHttpTransport(env.apiUrl);
 let appCheckTokenProvider: (() => Promise<string | null>) | null = null;
 let refreshInFlight: Promise<AuthTokens | null> | null = null;
+let onSessionExpired: (() => void) | null = null;
 
 /** Swaps the transport (the mock API installs itself here). */
 export function setTransport(next: Transport): void {
   transport = next;
+}
+
+/** Called after a failed refresh clears the session (the app clears its caches here). */
+export function setOnSessionExpired(handler: (() => void) | null): void {
+  onSessionExpired = handler;
 }
 
 /** Optional Firebase App Check token for sign-in endpoints. */
@@ -61,6 +67,11 @@ export function refreshSession(): Promise<AuthTokens | null> {
         return tokens;
       }
       await session.clear();
+      try {
+        onSessionExpired?.();
+      } catch {
+        // Cache cleanup is best effort.
+      }
       return null;
     } catch {
       return null;

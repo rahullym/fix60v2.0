@@ -11,7 +11,9 @@ export interface SearchFilters {
   language: string | null;
 }
 
-export const SEARCH_LANGUAGES = ['ml', 'en', 'hi', 'ta'] as const;
+/** Language codes (providers store codes: ml, en, ta, hi, kn, other). */
+export const SEARCH_LANGUAGES = ['ml', 'en', 'ta', 'hi', 'kn'] as const;
+export const DEFAULT_START_TIME = '09:00';
 export const DEFAULT_DURATION_HOURS = 2;
 export const MAX_DURATION_HOURS = 12;
 
@@ -41,7 +43,7 @@ export function toSearchQuery(serviceId: string, filters: SearchFilters): Omit<P
     serviceId,
     localityId: filters.localityId ?? undefined,
     date: filters.date ?? undefined,
-    startTime: filters.date ? (filters.startTime ?? undefined) : undefined,
+    startTime: filters.date ? (filters.startTime ?? DEFAULT_START_TIME) : undefined,
     durationHours: filters.date ? filters.durationHours : undefined,
     maxBudget: filters.maxBudget ?? undefined,
     minExperience: filters.minExperience > 0 ? filters.minExperience : undefined,

@@ -13,9 +13,11 @@ import type { StepProps } from './step-props';
 export function ServicesStep({ application, isEditable, returnTo }: StepProps): ReactNode {
   const { t } = useTranslation();
   const { pick } = useLocale();
-  const save = useSaveStep('services', returnTo);
   const categories = useCategories();
-  const [serviceIds, setServiceIds] = useState<string[]>(application.draft.services?.serviceIds ?? []);
+  const savedIds = application.draft.services?.serviceIds ?? [];
+  const [serviceIds, setServiceIds] = useState<string[]>(savedIds);
+  const isChanged = serviceIds.length !== savedIds.length || serviceIds.some((id) => !savedIds.includes(id));
+  const save = useSaveStep('services', returnTo, isChanged ? 'service_details' : undefined);
   const [errors, setErrors] = useState<FieldErrors>({});
 
   const toggle = (id: string): void => {

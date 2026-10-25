@@ -1,4 +1,4 @@
-import { type ReactNode, useEffect, useState } from 'react';
+import { type ComponentRef, type ReactNode, useEffect, useRef, useState } from 'react';
 import {
   Dimensions,
   Keyboard,
@@ -25,27 +25,35 @@ export interface ScreenProps {
   footer?: ReactNode;
   edges?: Edge[];
   contentStyle?: ViewStyle;
+  /** Page colour (defaults to the theme background). */
+  backgroundColor?: string;
 }
 
 /**
- * Height the on-screen keyboard currently covers. Used instead of KeyboardAvoidingView,
- * which does not lift content under Android edge-to-edge (always on in SDK 58).
+ * Screen Y where the on-screen keyboard starts, or null while it is hidden. Used instead of
+ * KeyboardAvoidingView, which does not lift content under Android edge-to-edge (always on in SDK 58).
  */
-export function useKeyboardInset(): number {
-  const [height, setHeight] = useState(0);
+function useKeyboardTop(): number | null {
+  const [top, setTop] = useState<number | null>(null);
   useEffect(() => {
     const showEvent = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
     const hideEvent = Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
     const show = Keyboard.addListener(showEvent, (event) =>
-      setHeight(Math.max(event.endCoordinates.height, Dimensions.get('screen').height - event.endCoordinates.screenY)),
+      setTop(Math.min(event.endCoordinates.screenY, Dimensions.get('screen').height - event.endCoordinates.height)),
     );
-    const hide = Keyboard.addListener(hideEvent, () => setHeight(0));
+    const hide = Keyboard.addListener(hideEvent, () => setTop(null));
     return () => {
       show.remove();
       hide.remove();
     };
   }, []);
-  return height;
+  return top;
+}
+
+/** Height the on-screen keyboard currently covers, measured from the bottom of the screen. */
+export function useKeyboardInset(): number {
+  const top = useKeyboardTop();
+  return top === null ? 0 : Math.max(0, Dimensions.get('screen').height - top);
 }
 
 /** Page container: safe area, padding, optional scroll + pull-to-refresh + sticky footer. */
@@ -57,16 +65,29 @@ export function Screen({
   footer,
   edges = ['bottom'],
   contentStyle,
+  backgroundColor,
 }: ScreenProps): ReactNode {
   const theme = useTheme();
   const padding = { padding: theme.spacing(4), gap: theme.spacing(4) };
-  const keyboardInset = useKeyboardInset();
+  const keyboardTop = useKeyboardTop();
   const insets = useSafeAreaInsets();
-  // SafeAreaView already pads the bottom inset; the keyboard covers it too, so don't count it twice.
-  const bottomInset = edges.includes('bottom') ? insets.bottom : 0;
+  const bodyRef = useRef<ComponentRef<typeof View>>(null);
+  const [bodyBottom, setBodyBottom] = useState<number | null>(null);
+  const measureBody = (): void => {
+    bodyRef.current?.measureInWindow((_x: number, y: number, _width: number, height: number) => setBodyBottom(y + height));
+  };
+  useEffect(() => {
+    if (keyboardTop !== null) {
+      bodyRef.current?.measureInWindow((_x: number, y: number, _width: number, height: number) => setBodyBottom(y + height));
+    }
+  }, [keyboardTop]);
+  // Lift only by the part of this screen the keyboard actually covers (the body already sits above
+  // the bottom safe-area inset and any tab bar), so nothing is counted twice.
+  const fallbackBottom = Dimensions.get('screen').height - (edges.includes('bottom') ? insets.bottom : 0);
+  const keyboardOverlap = keyboardTop === null ? 0 : Math.max(0, (bodyBottom ?? fallbackBottom) - keyboardTop);
   return (
-    <SafeAreaView edges={edges} style={[styles.flex, { backgroundColor: theme.colors.background }]}>
-      <View style={[styles.flex, { paddingBottom: Math.max(0, keyboardInset - bottomInset) }]}>
+    <SafeAreaView edges={edges} style={[styles.flex, { backgroundColor: backgroundColor ?? theme.colors.background }]}>
+      <View ref={bodyRef} onLayout={measureBody} style={[styles.flex, { paddingBottom: keyboardOverlap }]}>
         {isScrollable ? (
           <ScrollView
             keyboardShouldPersistTaps="handled"
@@ -83,7 +104,7 @@ export function Screen({
           <View
             style={[
               styles.footer,
-              { borderTopColor: theme.colors.border, backgroundColor: theme.colors.background, padding: theme.spacing(4) },
+              { borderTopColor: theme.colors.border, backgroundColor: backgroundColor ?? theme.colors.background, padding: theme.spacing(4) },
             ]}>
             {footer}
           </View>
@@ -99,28 +120,41 @@ export function Card({
   onPress,
   style,
   accessibilityLabel,
+  accentColor,
+  accessible,
 }: {
   children: ReactNode;
   onPress?: () => void;
   style?: ViewStyle;
   accessibilityLabel?: string;
+  /** Left border colour (old BookingCard: 3px status stripe). */
+  accentColor?: string;
+  /**
+   * Pass false on a tappable card that contains its own buttons, so screen readers can reach them.
+   * Then give the card an explicit accessible Pressable (e.g. its header) for the main action.
+   */
+  accessible?: boolean;
 }): ReactNode {
   const theme = useTheme();
   const cardStyle: ViewStyle = {
     backgroundColor: theme.colors.surface,
     borderColor: theme.colors.border,
-    borderWidth: 1,
-    borderRadius: theme.radius.lg,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: theme.radius.md,
     padding: theme.spacing(4),
+    boxShadow: '0px 0px 10px -8px rgba(15, 23, 42, 0.35)',
     gap: theme.spacing(2),
+    ...(accentColor ? { borderLeftWidth: 3, borderLeftColor: accentColor } : null),
   };
   if (!onPress) {
     return <View style={[cardStyle, style]}>{children}</View>;
   }
+  const isAccessible = accessible ?? true;
   return (
     <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={accessibilityLabel}
+      accessible={isAccessible}
+      accessibilityRole={isAccessible ? 'button' : undefined}
+      accessibilityLabel={isAccessible ? accessibilityLabel : undefined}
       onPress={onPress}
       style={({ pressed }) => [cardStyle, { opacity: pressed ? 0.85 : 1 }, style]}>
       {children}
@@ -143,7 +177,9 @@ export function SectionHeader({
 }): ReactNode {
   return (
     <Row style={{ justifyContent: 'space-between' }}>
-      <Text variant="heading">{title}</Text>
+      <Text variant="title" style={{ fontSize: 20, lineHeight: 26, fontWeight: '800' }}>
+        {title}
+      </Text>
       {actionLabel && onAction ? (
         <Pressable accessibilityRole="button" onPress={onAction} hitSlop={12}>
           <Text variant="label" tone="primary">

@@ -6,3 +6,8 @@ export { Card, Divider, ListRow, Row, Screen, SectionHeader, type ScreenProps } 
 export { Avatar, Chip, EmptyState, ErrorState, LoadingState, Notice, Pill, RatingStars, type PillTone } from './feedback';
 export { Checkbox, ToggleRow } from './toggles';
 export { DateTimeField, SelectField, Stepper, type SelectOption } from './pickers';
+export { AppHeader, HeaderIconButton, useLightStatusBar } from './app-header';
+export { GradientIcon } from './gradient-icon';
+export { OtpInput } from './otp-input';
+export { TopTabs } from './top-tabs';
+export { SuccessScreen } from './success-screen';

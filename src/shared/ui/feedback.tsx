@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { errorMessageKey } from '../lib/error-copy';
+import { palette as oldPalette } from '../theme/palette';
 import { useTheme } from '../theme/theme';
 import { Button } from './button';
 import { Icon, type IconName } from './icon';
@@ -38,10 +39,10 @@ export function EmptyState({
   const theme = useTheme();
   return (
     <View style={styles.center}>
-      <View style={[styles.iconBubble, { backgroundColor: theme.colors.surfaceAlt }]}>
-        <Icon name={icon} size={30} color={theme.colors.textMuted} />
+      <View style={[styles.iconBubble, { backgroundColor: theme.colors.primaryLight }]}>
+        <Icon name={icon} size={56} color={oldPalette.emptyIcon} />
       </View>
-      <Text variant="heading" align="center">
+      <Text variant="title" tone="primary" align="center" style={styles.emptyTitle}>
         {title}
       </Text>
       {body ? (
@@ -109,16 +110,15 @@ export function Notice({
 export type PillTone = 'neutral' | 'info' | 'success' | 'warning' | 'danger' | 'accent';
 
 export function Pill({ label, tone = 'neutral', icon }: { label: string; tone?: PillTone; icon?: IconName }): ReactNode {
-  const theme = useTheme();
-  const palette: Record<PillTone, { bg: string; fg: string }> = {
-    neutral: { bg: theme.colors.surfaceAlt, fg: theme.colors.textMuted },
-    info: { bg: theme.colors.infoLight, fg: theme.colors.info },
-    success: { bg: theme.colors.successLight, fg: theme.colors.success },
-    warning: { bg: theme.colors.warningLight, fg: theme.colors.warning },
-    danger: { bg: theme.colors.dangerLight, fg: theme.colors.danger },
-    accent: { bg: theme.colors.accentLight, fg: theme.colors.accent },
+  const pillColors: Record<PillTone, { bg: string; fg: string }> = {
+    neutral: oldPalette.status.neutral,
+    info: oldPalette.status.active,
+    success: oldPalette.status.completed,
+    warning: oldPalette.status.attention,
+    danger: oldPalette.status.danger,
+    accent: oldPalette.status.upcoming,
   };
-  const colors = palette[tone];
+  const colors = pillColors[tone];
   return (
     <View style={[styles.pill, { backgroundColor: colors.bg }]}>
       {icon ? <Icon name={icon} size={13} color={colors.fg} /> : null}
@@ -151,8 +151,8 @@ export function Chip({
       style={[
         styles.chip,
         {
-          backgroundColor: isSelected ? theme.colors.primary : theme.colors.surface,
-          borderColor: isSelected ? theme.colors.primary : theme.colors.border,
+          backgroundColor: isSelected ? theme.colors.primary : oldPalette.chip.bg,
+          borderColor: isSelected ? theme.colors.primary : oldPalette.chip.border,
         },
       ]}>
       {icon ? <Icon name={icon} size={16} color={isSelected ? theme.colors.onPrimary : theme.colors.text} /> : null}
@@ -185,7 +185,7 @@ export function Avatar({ uri, name, size = 48 }: { uri: string | null; name: str
     <View
       accessibilityLabel={name}
       style={[styles.avatar, { width: size, height: size, borderRadius: size / 2, backgroundColor: theme.colors.primarySoft }]}>
-      <Text variant="bodyStrong" style={{ color: theme.colors.primaryMid, fontSize: size * 0.36 }}>
+      <Text variant="bodyStrong" style={{ color: theme.colors.primary, fontSize: size * 0.36 }}>
         {initials || '?'}
       </Text>
     </View>
@@ -230,10 +230,11 @@ export function RatingStars({
 const styles = StyleSheet.create({
   flex: { flex: 1 },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12, padding: 24, minHeight: 240 },
-  iconBubble: { width: 64, height: 64, borderRadius: 32, alignItems: 'center', justifyContent: 'center' },
+  iconBubble: { width: 132, height: 132, borderRadius: 66, alignItems: 'center', justifyContent: 'center', marginBottom: 8 },
+  emptyTitle: { fontSize: 22, lineHeight: 30 },
   notice: { flexDirection: 'row', gap: 10, padding: 12, alignItems: 'flex-start' },
-  pill: { flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 10, paddingVertical: 4, borderRadius: 999, alignSelf: 'flex-start' },
-  chip: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 14, minHeight: 48, borderRadius: 999, borderWidth: 1 },
+  pill: { flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 10, minHeight: 25, borderRadius: 999, alignSelf: 'flex-start' },
+  chip: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 16, minHeight: 48, borderRadius: 10, borderWidth: 1 },
   avatar: { alignItems: 'center', justifyContent: 'center' },
   stars: { flexDirection: 'row', gap: 2 },
 });

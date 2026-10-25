@@ -8,8 +8,8 @@ import { useLocale } from '@/shared/lib/use-locale';
 import { useTheme } from '@/shared/theme/theme';
 import { Button, Chip, DateTimeField, Icon, Row, Screen, Stepper, Text, TextField } from '@/shared/ui';
 import { LocationFields } from '../location/location-fields';
-import { dateFromIso, dateFromSlot, toClockTime, toIsoDate, todayIso } from '../model/slot';
-import { MAX_DURATION_HOURS, SEARCH_LANGUAGES, type SearchFilters } from './search-filters';
+import { clockFromPicker, isoFromPicker, pickerDateFromIso, pickerDateFromSlot, todayIso } from '../model/slot';
+import { DEFAULT_START_TIME, MAX_DURATION_HOURS, SEARCH_LANGUAGES, type SearchFilters } from './search-filters';
 
 /** Full-screen filter editor. Edits a draft; Apply commits it. */
 export function FilterSheet({
@@ -42,7 +42,8 @@ export function FilterSheet({
   }
 
   const update = (patch: Partial<SearchFilters>): void => setDraft((current) => ({ ...current, ...patch }));
-  const timeDate = draft.date && draft.startTime ? dateFromSlot(draft.date, draft.startTime) : null;
+  const timeDate = draft.date && draft.startTime ? pickerDateFromSlot(draft.date, draft.startTime) : null;
+  const timeLabel = draft.date && draft.startTime ? formatTime(`${draft.date}T${draft.startTime}:00+05:30`, locale) : null;
 
   const apply = (): void => {
     const budget = Number.parseInt(budgetText.replace(/\D/g, ''), 10);
@@ -88,17 +89,17 @@ export function FilterSheet({
         <DateTimeField
           label={t('customer:form.date')}
           mode="date"
-          value={draft.date ? dateFromIso(draft.date) : null}
+          value={draft.date ? pickerDateFromIso(draft.date) : null}
           displayValue={draft.date ? formatDate(draft.date, locale) : null}
-          minimumDate={dateFromIso(todayIso())}
-          onChange={(next) => update({ date: toIsoDate(next) })}
+          minimumDate={pickerDateFromIso(todayIso())}
+          onChange={(next) => update({ date: isoFromPicker(next), startTime: draft.startTime ?? DEFAULT_START_TIME })}
         />
         <DateTimeField
           label={t('customer:form.startTime')}
           mode="time"
           value={timeDate}
-          displayValue={timeDate ? formatTime(timeDate, locale) : null}
-          onChange={(next) => update({ startTime: toClockTime(next), date: draft.date ?? todayIso() })}
+          displayValue={timeLabel}
+          onChange={(next) => update({ startTime: clockFromPicker(next), date: draft.date ?? todayIso() })}
         />
         {draft.date ? (
           <>

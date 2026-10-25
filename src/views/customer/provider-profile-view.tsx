@@ -33,6 +33,7 @@ import {
 
 function OverflowMenu({ profile }: { profile: ProviderPublicProfile }): ReactNode {
   const { t } = useTranslation();
+  const theme = useTheme();
   const block = useBlockProvider(() => router.back());
   const open = (): void => {
     Alert.alert(profile.displayName, undefined, [
@@ -52,7 +53,7 @@ function OverflowMenu({ profile }: { profile: ProviderPublicProfile }): ReactNod
       onPress={open}
       disabled={block.isBlocking}
       style={styles.menuButton}>
-      <Icon name="ellipsis-vertical" />
+      <Icon name="ellipsis-vertical" color={theme.colors.onPrimary} />
     </Pressable>
   );
 }

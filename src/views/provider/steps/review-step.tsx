@@ -13,18 +13,29 @@ import {
   useDocuments,
   useSelectedServiceDetails,
 } from '@/features/provider/model/queries';
+import { successFlash } from '@/features/success/success-flash';
 import { api } from '@/shared/api/endpoints';
-import { APPLICATION_STEPS, type ApplicationStepKey, type ProviderApplication } from '@/shared/api/types';
+import { APPLICATION_STEPS, type ApplicationStepKey, type DocumentType, type ProviderApplication } from '@/shared/api/types';
 import { formatDate, formatMoney, formatTime } from '@/shared/lib/format';
 import { useLocale } from '@/shared/lib/use-locale';
 import { clockToDate } from '@/features/provider/availability/clock';
-import { Card, Checkbox, Notice, Row, Text } from '@/shared/ui';
+import { Button, Card, Checkbox, Notice, Row, Text } from '@/shared/ui';
 import { WizardFrame } from '@/widgets/provider/wizard-frame';
 import type { StepProps } from './step-props';
 
 const DASH = '—';
 
-function useStepSummaries(application: ProviderApplication): Record<ApplicationStepKey, string[]> {
+interface ReviewSummary {
+  lines: Record<ApplicationStepKey, string[]>;
+  /** Mandatory document types still missing. */
+  missingDocuments: DocumentType[];
+  /** Selected services without rates (picked after step 4 was saved). */
+  servicesWithoutDetails: string[];
+  /** Documents or catalog details are still loading. */
+  isChecking: boolean;
+}
+
+function useStepSummaries(application: ProviderApplication): ReviewSummary {
   const { t } = useTranslation();
   const { locale, pick } = useLocale();
   const categories = useCategories();
@@ -41,9 +52,11 @@ function useStepSummaries(application: ProviderApplication): Record<ApplicationS
     enabled: Boolean(districtId),
     staleTime: 60 * 60_000,
   });
+  const detailedIds = new Set((draft.service_details?.services ?? []).map((item) => item.serviceId));
+  const servicesWithoutDetails = (draft.services?.serviceIds ?? []).filter((id) => !detailedIds.has(id)).map(serviceName);
   const localityName = pick(localities.data?.items.find((item) => item.id === draft.location?.localityId)?.name);
 
-  return {
+  const lines: Record<ApplicationStepKey, string[]> = {
     personal: draft.personal
       ? [
           draft.personal.fullName,
@@ -72,7 +85,7 @@ function useStepSummaries(application: ProviderApplication): Record<ApplicationS
     experience: draft.experience
       ? [
           t('common:units.years', { count: draft.experience.yearsExperience ?? 0 }),
-          draft.experience.languages.map((language) => t(`provider:languages.${language}`, { defaultValue: language })).join(', '),
+          draft.experience.languages.map((language) => t(`common:languages.${language}`, { defaultValue: language })).join(', '),
           t('provider:review.qualifications', { count: draft.experience.qualifications.length }),
         ]
       : [],
@@ -99,13 +112,19 @@ function useStepSummaries(application: ProviderApplication): Record<ApplicationS
           : [],
     review: [],
   };
+  return {
+    lines,
+    missingDocuments: missing,
+    servicesWithoutDetails,
+    isChecking: documents.isLoading || services.isLoading,
+  };
 }
 
 /** Step 9: everything at a glance with Edit links, the declaration and Submit. */
 export function ReviewStep({ application, isEditable }: StepProps): ReactNode {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-  const summaries = useStepSummaries(application);
+  const { lines: summaries, missingDocuments, servicesWithoutDetails, isChecking } = useStepSummaries(application);
   const [isAccepted, setIsAccepted] = useState(application.draft.review?.declarationAccepted ?? false);
   const [declarationError, setDeclarationError] = useState<string | null>(null);
 
@@ -119,18 +138,31 @@ export function ReviewStep({ application, isEditable }: StepProps): ReactNode {
       void queryClient.invalidateQueries({ queryKey: providerKeys.me });
       void queryClient.invalidateQueries({ queryKey: providerKeys.documents });
       router.dismissTo('/provider/application');
+      successFlash.show({
+        title: t('provider:review.successTitle'),
+        body: t('provider:review.successBody'),
+        actionLabel: t('common:actions.continue'),
+      });
+    },
+    onError: () => {
+      void queryClient.invalidateQueries({ queryKey: providerKeys.application });
+      void queryClient.invalidateQueries({ queryKey: providerKeys.documents });
     },
   });
 
+  const incomplete = APPLICATION_STEPS.filter((key) => key !== 'review' && !application.completedSteps.includes(key));
+  const isBlocked = isChecking || incomplete.length > 0 || missingDocuments.length > 0 || servicesWithoutDetails.length > 0;
+
   const onSubmit = (): void => {
+    if (isBlocked) {
+      return;
+    }
     const errors = validateReview({ declarationAccepted: isAccepted });
     setDeclarationError(errors.declarationAccepted ? t(errors.declarationAccepted) : null);
     if (!errors.declarationAccepted) {
       submit.mutate();
     }
   };
-
-  const incomplete = APPLICATION_STEPS.filter((key) => key !== 'review' && !application.completedSteps.includes(key));
 
   return (
     <WizardFrame
@@ -140,12 +172,42 @@ export function ReviewStep({ application, isEditable }: StepProps): ReactNode {
       onContinue={onSubmit}
       isSaving={submit.isPending}
       saveError={submit.error}
-      continueLabel={t('provider:review.submit')}>
+      continueLabel={t('provider:review.submit')}
+      isContinueDisabled={isBlocked}>
       {incomplete.length > 0 ? (
         <Notice
           tone="warning"
           title={t('provider:review.incompleteTitle')}
           body={incomplete.map((key) => t(`provider:steps.${key}.title`)).join(', ')}
+        />
+      ) : null}
+      {servicesWithoutDetails.length > 0 ? (
+        <Notice
+          tone="warning"
+          title={t('provider:review.servicesWithoutRatesTitle')}
+          body={servicesWithoutDetails.join(', ')}
+        />
+      ) : null}
+      {servicesWithoutDetails.length > 0 && isEditable ? (
+        <Button
+          label={t('provider:review.addRates')}
+          variant="secondary"
+          onPress={() => router.push(stepHref('service_details', 'review'))}
+        />
+      ) : null}
+      {missingDocuments.length > 0 ? (
+        <Notice
+          tone="warning"
+          title={t('provider:documents.missingTitle')}
+          body={missingDocuments.map((type) => t(`common:documentType.${type}`)).join('\n')}
+        />
+      ) : null}
+      {missingDocuments.length > 0 && isEditable ? (
+        <Button
+          label={t('provider:review.uploadDocuments')}
+          variant="secondary"
+          icon="cloud-upload-outline"
+          onPress={() => router.push(stepHref('documents', 'review'))}
         />
       ) : null}
       {APPLICATION_STEPS.filter((key) => key !== 'review').map((key) => (

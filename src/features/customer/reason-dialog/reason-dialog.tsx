@@ -32,6 +32,15 @@ export function ReasonDialog({
   const theme = useTheme();
   const [reason, setReason] = useState('');
   const [fieldError, setFieldError] = useState<string | null>(null);
+  const [wasVisible, setWasVisible] = useState(isVisible);
+
+  if (isVisible !== wasVisible) {
+    setWasVisible(isVisible);
+    if (isVisible) {
+      setReason('');
+      setFieldError(null);
+    }
+  }
 
   const submit = (): void => {
     const trimmed = reason.trim();

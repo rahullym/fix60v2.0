@@ -1,14 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import { type ReactNode, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { BookingSummaryCard } from '@/entities/booking/booking-summary-card';
 import { customerKeys } from '@/features/customer/model/query-keys';
 import { useRefetchOnFocus } from '@/features/customer/model/use-refetch-on-focus';
 import { api } from '@/shared/api/endpoints';
 import type { BookingScope } from '@/shared/api/types';
-import { EmptyState, ErrorState, LoadingState, Screen } from '@/shared/ui';
-import { SegmentedTabs } from '@/widgets/customer/segmented-tabs';
+import { EmptyState, ErrorState, LoadingState, Screen, TopTabs } from '@/shared/ui';
 
 const SCOPES: BookingScope[] = ['upcoming', 'active', 'past'];
 
@@ -21,12 +21,13 @@ export function BookingsView(): ReactNode {
   const items = query.data?.items ?? [];
 
   return (
-    <Screen onRefresh={query.refetch} isRefreshing={query.isRefetching}>
-      <SegmentedTabs
+    <View style={styles.flex}>
+      <TopTabs
         value={scope}
-        options={SCOPES.map((value) => ({ value, label: t(`customer:bookings.scope.${value}`) }))}
+        tabs={SCOPES.map((value) => ({ value, label: t(`customer:bookings.scope.${value}`) }))}
         onChange={setScope}
       />
+      <Screen onRefresh={query.refetch} isRefreshing={query.isRefetching}>
       {query.isLoading ? (
         <LoadingState />
       ) : query.isError ? (
@@ -48,6 +49,9 @@ export function BookingsView(): ReactNode {
           />
         ))
       )}
-    </Screen>
+      </Screen>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({ flex: { flex: 1 } });

@@ -219,7 +219,7 @@ export function DocumentChecklist({
           key={item.type}
           type={item.type}
           isMandatory={item.isMandatory}
-          notes={item.notes.map((note) => pick(note))}
+          notes={[...new Set(item.notes.map((note) => pick(note)))]}
           document={latestDocument(items, item.type)}
           isEditable={isEditable}
         />

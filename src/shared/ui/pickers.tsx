@@ -296,6 +296,7 @@ export function Stepper({
   suffix?: string;
 }): ReactNode {
   const theme = useTheme();
+  const { t } = useTranslation();
   const clamp = (next: number) => Math.min(max, Math.max(min, Math.round(next * 10) / 10));
   const buttonStyle = [styles.stepButton, { borderColor: theme.colors.border, borderRadius: theme.radius.md }];
   return (
@@ -304,14 +305,14 @@ export function Stepper({
         {label}
       </Text>
       <View style={styles.stepRow} accessibilityRole="adjustable" accessibilityLabel={label} accessibilityValue={{ min, max, now: value }}>
-        <Pressable accessibilityRole="button" accessibilityLabel="−" style={buttonStyle} onPress={() => onChange(clamp(value - step))} disabled={value <= min}>
+        <Pressable accessibilityRole="button" accessibilityLabel={t('common:actions.decrease', { label })} accessibilityState={{ disabled: value <= min }} style={buttonStyle} onPress={() => onChange(clamp(value - step))} disabled={value <= min}>
           <Icon name="remove" />
         </Pressable>
         <Text variant="title" style={styles.stepValue}>
           {value}
           {suffix ? ` ${suffix}` : ''}
         </Text>
-        <Pressable accessibilityRole="button" accessibilityLabel="+" style={buttonStyle} onPress={() => onChange(clamp(value + step))} disabled={value >= max}>
+        <Pressable accessibilityRole="button" accessibilityLabel={t('common:actions.increase', { label })} accessibilityState={{ disabled: value >= max }} style={buttonStyle} onPress={() => onChange(clamp(value + step))} disabled={value >= max}>
           <Icon name="add" />
         </Pressable>
       </View>

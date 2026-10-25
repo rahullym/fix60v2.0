@@ -60,6 +60,7 @@ export function AccountView(): ReactNode {
       </Card>
 
       <View>
+        <ListRow icon="heart-outline" title={t('customer:tabs.savedProviders')} onPress={() => router.push('/customer/saved')} />
         <ListRow icon="settings-outline" title={t('common:settings.title')} onPress={() => router.push('/settings')} />
         <ListRow
           icon="notifications-outline"

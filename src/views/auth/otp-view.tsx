@@ -1,18 +1,22 @@
 import { router } from 'expo-router';
-import { type ReactNode, useEffect, useState } from 'react';
+import { type ReactNode, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable } from 'react-native';
 import { authFlow } from '@/features/auth/model/auth-flow';
 import { hasErrorCode } from '@/shared/api/api-error';
 import { errorMessageKey } from '@/shared/lib/error-copy';
 import { maskPhone } from '@/shared/lib/format';
-import { Button, Notice, Screen, Text, TextField } from '@/shared/ui';
+import { AuthScreen } from '@/widgets/auth/auth-header';
+import { Button, Notice, OtpInput, Text } from '@/shared/ui';
 
 const RESEND_SECONDS = 30;
 
 export function OtpView(): ReactNode {
   const { t } = useTranslation();
-  const { phone, role } = authFlow.get();
+  // Snapshot the flow into state: it is a mutable module object, so reading it during render is impure.
+  const [phone] = useState(() => authFlow.get().phone);
+  const [role, setRole] = useState(() => authFlow.get().role);
+  const isVerifyingRef = useRef(false);
   const [code, setCode] = useState('');
   const [error, setError] = useState<unknown>(null);
   const [isVerifying, setIsVerifying] = useState(false);
@@ -27,9 +31,10 @@ export function OtpView(): ReactNode {
   }, [secondsLeft]);
 
   const verify = async (value = code): Promise<void> => {
-    if (value.length !== 6) {
+    if (value.length !== 6 || isVerifyingRef.current) {
       return;
     }
+    isVerifyingRef.current = true;
     setError(null);
     setIsVerifying(true);
     try {
@@ -40,6 +45,7 @@ export function OtpView(): ReactNode {
     } catch (verifyError) {
       setError(verifyError);
     } finally {
+      isVerifyingRef.current = false;
       setIsVerifying(false);
     }
   };
@@ -60,24 +66,19 @@ export function OtpView(): ReactNode {
   const isRoleMismatch = hasErrorCode(error, 'ROLE_MISMATCH');
 
   return (
-    <Screen footer={<Button label={t('auth:otp.verify')} onPress={() => verify()} isLoading={isVerifying} isDisabled={code.length !== 6} />}>
-      <Text variant="title">{t('auth:otp.title')}</Text>
-      <Text tone="muted">{t('auth:otp.body', { phone: phone ? maskPhone(phone) : '' })}</Text>
-      <TextField
+    <AuthScreen
+      title={t('auth:otp.title')}
+      subtitle={t('auth:otp.body', { phone: phone ? maskPhone(phone) : '' })}
+      footer={<Button label={t('auth:otp.verify')} onPress={() => verify()} isLoading={isVerifying} isDisabled={code.length !== 6} />}>
+      <OtpInput
         label={t('auth:otp.label')}
         value={code}
-        onChangeText={(text) => {
-          const digits = text.replace(/\D/g, '').slice(0, 6);
+        onChange={(digits) => {
           setCode(digits);
           if (digits.length === 6) {
             verify(digits);
           }
         }}
-        keyboardType="number-pad"
-        textContentType="oneTimeCode"
-        autoComplete="sms-otp"
-        maxLength={6}
-        autoFocus
         error={error && !isRoleMismatch ? t(errorMessageKey(error)) : null}
       />
       {isRoleMismatch ? (
@@ -87,7 +88,9 @@ export function OtpView(): ReactNode {
             variant="secondary"
             label={t(role === 'customer' ? 'auth:otp.switchToProvider' : 'auth:otp.switchToCustomer')}
             onPress={() => {
-              authFlow.chooseRole(role === 'customer' ? 'provider' : 'customer');
+              const nextRole = role === 'customer' ? 'provider' : 'customer';
+              authFlow.chooseRole(nextRole);
+              setRole(nextRole);
               setError(null);
               verify();
             }}
@@ -99,6 +102,6 @@ export function OtpView(): ReactNode {
           {secondsLeft > 0 ? t('auth:otp.resendIn', { seconds: secondsLeft }) : t('auth:otp.resend')}
         </Text>
       </Pressable>
-    </Screen>
+    </AuthScreen>
   );
 }

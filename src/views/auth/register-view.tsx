@@ -3,6 +3,7 @@ import { Link } from 'expo-router';
 import { type ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { authFlow } from '@/features/auth/model/auth-flow';
+import { successFlash } from '@/features/success/success-flash';
 import { api } from '@/shared/api/endpoints';
 import type { RegisterRequest } from '@/shared/api/types';
 import { session } from '@/shared/auth/session';
@@ -10,7 +11,8 @@ import { toIndianE164 } from '@/shared/auth/phone-auth';
 import { currentLocale } from '@/shared/i18n';
 import { errorMessageKey } from '@/shared/lib/error-copy';
 import { ageFrom, formatDate, localized, toIsoDate } from '@/shared/lib/format';
-import { Button, Checkbox, DateTimeField, Notice, Screen, SelectField, Text, TextField } from '@/shared/ui';
+import { AuthScreen } from '@/widgets/auth/auth-header';
+import { Button, Checkbox, DateTimeField, Notice, SelectField, Text, TextField } from '@/shared/ui';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -28,7 +30,7 @@ function PolicyLink({ slug, label }: { slug: string; label: string }): ReactNode
 export function RegisterView(): ReactNode {
   const { t } = useTranslation();
   const locale = currentLocale();
-  const { role, phone } = authFlow.get();
+  const [{ role, phone }] = useState(() => ({ role: authFlow.get().role, phone: authFlow.get().phone }));
   const isProvider = role === 'provider';
 
   const [fullName, setFullName] = useState('');
@@ -96,6 +98,11 @@ export function RegisterView(): ReactNode {
         : { ...shared, role: 'customer', districtId: districtId ?? undefined, localityId: localityId ?? undefined };
       const { user, ...tokens } = await api.auth.register(body);
       await session.signIn(tokens, user);
+      successFlash.show({
+        title: t('auth:success.title'),
+        body: t(isProvider ? 'auth:success.bodyProvider' : 'auth:success.bodyCustomer'),
+        actionLabel: t('common:actions.continue'),
+      });
     } catch (error) {
       setSubmitError(error);
     } finally {
@@ -107,9 +114,10 @@ export function RegisterView(): ReactNode {
   maxBirthDate.setFullYear(maxBirthDate.getFullYear() - 18);
 
   return (
-    <Screen footer={<Button label={t('auth:register.submit')} onPress={submit} isLoading={isSubmitting} />}>
-      <Text variant="title">{t(isProvider ? 'auth:register.titleProvider' : 'auth:register.titleCustomer')}</Text>
-      <Text tone="muted">{t('auth:register.verifiedAs', { phone })}</Text>
+    <AuthScreen
+      title={t(isProvider ? 'auth:register.titleProvider' : 'auth:register.titleCustomer')}
+      subtitle={t('auth:register.verifiedAs', { phone })}
+      footer={<Button label={t('auth:register.submit')} onPress={submit} isLoading={isSubmitting} />}>
 
       <TextField
         label={t('auth:register.fullName')}
@@ -151,7 +159,7 @@ export function RegisterView(): ReactNode {
       <TextField
         label={t('auth:register.whatsappOptional')}
         hint={t('auth:register.whatsappHint')}
-        prefix="+91"
+        prefix="🇮🇳 +91"
         value={whatsapp}
         onChangeText={(text) => setWhatsapp(text.replace(/\D/g, '').slice(0, 10))}
         keyboardType="phone-pad"
@@ -204,6 +212,6 @@ export function RegisterView(): ReactNode {
       <Checkbox isChecked={whatsappUpdates} onChange={setWhatsappUpdates} label={t('common:consents.whatsapp_updates')} />
 
       {submitError ? <Notice tone="danger" body={t(errorMessageKey(submitError))} /> : null}
-    </Screen>
+    </AuthScreen>
   );
 }

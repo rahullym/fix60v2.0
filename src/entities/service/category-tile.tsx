@@ -2,40 +2,81 @@ import type { ReactNode } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import type { Category } from '@/shared/api/types';
 import { useLocale } from '@/shared/lib/use-locale';
+import { gradientFor, palette } from '@/shared/theme/palette';
 import { useTheme } from '@/shared/theme/theme';
-import { Icon, Text } from '@/shared/ui';
+import { GradientIcon, Text, type IconName } from '@/shared/ui';
 import { serviceIcon } from './service-icon';
 
-/** Square-ish tile for the home category grid. */
+/** Service picker card from the original Fix60 home: gradient icon square, name, sub-services line. */
 export function CategoryTile({ category, onPress }: { category: Category; onPress: () => void }): ReactNode {
-  const theme = useTheme();
   const { pick } = useLocale();
   const name = pick(category.name);
+  const subServices = category.services.map((service) => pick(service.name)).join(', ');
+  return (
+    <ServiceTileFrame
+      label={name}
+      onPress={onPress}
+      icon={serviceIcon(category.slug)}
+      colors={gradientFor(category.id)}
+      title={name}
+      subtitle={subServices}
+    />
+  );
+}
+
+/** Teal "View more" tile that closes the grid. */
+export function ViewMoreTile({ label, onPress }: { label: string; onPress: () => void }): ReactNode {
+  return <ServiceTileFrame label={label} onPress={onPress} icon="grid" colors={palette.viewMore} title={label} />;
+}
+
+function ServiceTileFrame({
+  label,
+  onPress,
+  icon,
+  colors,
+  title,
+  subtitle,
+}: {
+  label: string;
+  onPress: () => void;
+  icon: IconName;
+  colors: readonly [string, string];
+  title: string;
+  subtitle?: string;
+}): ReactNode {
+  const theme = useTheme();
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={name}
+      accessibilityLabel={label}
       onPress={onPress}
       style={({ pressed }) => [
         styles.tile,
-        {
-          backgroundColor: theme.colors.surface,
-          borderColor: theme.colors.border,
-          borderRadius: theme.radius.lg,
-          opacity: pressed ? 0.85 : 1,
-        },
+        { backgroundColor: theme.colors.surface, borderRadius: theme.radius.lg, opacity: pressed ? 0.85 : 1 },
       ]}>
-      <View style={[styles.bubble, { backgroundColor: theme.colors.primarySoft }]}>
-        <Icon name={serviceIcon(category.slug)} size={24} color={theme.colors.primaryMid} />
+      <GradientIcon icon={icon} colors={colors} size={60} />
+      <View style={styles.text}>
+        <Text variant="bodyStrong" numberOfLines={1} style={styles.title}>
+          {title}
+        </Text>
+        {subtitle ? (
+          <Text variant="caption" tone="muted" numberOfLines={1}>
+            {subtitle}
+          </Text>
+        ) : null}
       </View>
-      <Text variant="label" align="center" numberOfLines={2}>
-        {name}
-      </Text>
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
-  tile: { flex: 1, minHeight: 112, borderWidth: 1, padding: 12, alignItems: 'center', justifyContent: 'center', gap: 8 },
-  bubble: { width: 48, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center' },
+  tile: {
+    flex: 1,
+    paddingVertical: 18,
+    paddingHorizontal: 14,
+    gap: 12,
+    boxShadow: '0px 0px 10px -8px rgba(15, 23, 42, 0.35)',
+  },
+  text: { gap: 2 },
+  title: { fontSize: 16, fontWeight: '600' },
 });

@@ -16,7 +16,7 @@
     "jobs": "Jobs",
     "jobsA11y_one": "Jobs, {{count}} new invitation",
     "jobsA11y_other": "Jobs, {{count}} new invitations",
-    "bookings": "Bookings",
+    "bookings": "Schedule",
     "availability": "Availability",
     "profile": "Profile"
   },
@@ -161,14 +161,6 @@
     "year": "Year (optional)",
     "addQualification": "Add qualification"
   },
-  "languages": {
-    "Malayalam": "Malayalam",
-    "English": "English",
-    "Tamil": "Tamil",
-    "Hindi": "Hindi",
-    "Kannada": "Kannada",
-    "Other": "Other"
-  },
   "qualificationKind": {
     "qualification": "Qualification",
     "training": "Training",
@@ -298,13 +290,20 @@
     "declarationPrefix": "I confirm the details I gave are true and I agree to the",
     "agreement": "Provider agreement",
     "declarationSuffix": ".",
-    "submit": "Submit application"
+    "submit": "Submit application",
+    "successTitle": "Application submitted!",
+    "successBody": "Our team will review your details and documents. We will notify you when you are approved.",
+    "servicesWithoutRatesTitle": "Add rates for these services",
+    "addRates": "Add rates",
+    "uploadDocuments": "Upload documents"
   },
   "jobs": {
     "openTitle": "New job invitations",
     "privacyHint": "Customer contact details are shared only after a booking is confirmed.",
     "emptyTitle": "No new jobs right now",
-    "emptyBody": "We'll notify you when a customer nearby needs your service. Keep your availability up to date."
+    "emptyBody": "We'll notify you when a customer nearby needs your service. Keep your availability up to date.",
+    "heroKicker": "Ready for work today?",
+    "greeting": "Hello, {{name}}"
   },
   "invitation": {
     "title": "Job invitation",
@@ -394,7 +393,8 @@
     "reviewTitle": "Customer's review",
     "report": "Report customer",
     "reportHint": "For unsafe behaviour or misconduct",
-    "help": "Get help with this booking"
+    "help": "Get help with this booking",
+    "startOpensAt": "You can start this job from {{time}}."
   },
   "profile": {
     "code": "Provider ID {{code}}",
@@ -435,5 +435,8 @@
     "rulesEmpty": "Turn on at least one working day.",
     "timeOrder": "The end time must be after the start time.",
     "declaration": "Please confirm the declaration to submit."
+  },
+  "units": {
+    "km": "km"
   }
 }

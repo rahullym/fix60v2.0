@@ -8,6 +8,7 @@ import { ProviderSummaryCard } from '@/entities/provider/provider-summary-card';
 import { FilterSheet } from '@/features/customer/provider-search/filter-sheet';
 import {
   activeFilterCount,
+  DEFAULT_START_TIME,
   defaultFilters,
   toSearchQuery,
   type SearchFilters,
@@ -66,7 +67,7 @@ export function SearchView(): ReactNode {
   const filterCount = activeFilterCount(filters);
   const summary = [
     locality ? pick(locality.name) : t('customer:search.anywhere'),
-    filters.date ? formatSlot(filters.date, filters.startTime ?? '09:00', locale) : null,
+    filters.date ? formatSlot(filters.date, filters.startTime ?? DEFAULT_START_TIME, locale) : null,
   ]
     .filter(Boolean)
     .join(' · ');

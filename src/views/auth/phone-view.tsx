@@ -5,14 +5,15 @@ import { authFlow } from '@/features/auth/model/auth-flow';
 import { DEV_OTP, toIndianE164 } from '@/shared/auth/phone-auth';
 import { env } from '@/shared/config/env';
 import { errorMessageKey } from '@/shared/lib/error-copy';
-import { Button, Notice, Screen, Text, TextField } from '@/shared/ui';
+import { AuthScreen } from '@/widgets/auth/auth-header';
+import { Button, Notice, Text, TextField } from '@/shared/ui';
 
 export function PhoneView(): ReactNode {
   const { t } = useTranslation();
   const [input, setInput] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isSending, setIsSending] = useState(false);
-  const role = authFlow.get().role;
+  const [role] = useState(() => authFlow.get().role);
 
   const send = async (): Promise<void> => {
     const phone = toIndianE164(input);
@@ -33,12 +34,13 @@ export function PhoneView(): ReactNode {
   };
 
   return (
-    <Screen footer={<Button label={t('auth:phone.sendCode')} onPress={send} isLoading={isSending} />}>
-      <Text variant="title">{t(role === 'provider' ? 'auth:phone.titleProvider' : 'auth:phone.titleCustomer')}</Text>
-      <Text tone="muted">{t('auth:phone.body')}</Text>
+    <AuthScreen
+      title={t(role === 'provider' ? 'auth:phone.titleProvider' : 'auth:phone.titleCustomer')}
+      subtitle={t('auth:phone.body')}
+      footer={<Button label={t('auth:phone.sendCode')} onPress={send} isLoading={isSending} />}>
       <TextField
         label={t('auth:phone.label')}
-        prefix="+91"
+        prefix="🇮🇳 +91"
         value={input}
         onChangeText={(text) => setInput(text.replace(/[^\d]/g, '').slice(0, 10))}
         keyboardType="phone-pad"
@@ -51,6 +53,6 @@ export function PhoneView(): ReactNode {
         onSubmitEditing={send}
       />
       {env.authMode === 'dev' ? <Notice tone="warning" body={t('auth:phone.devNotice', { code: DEV_OTP })} /> : null}
-    </Screen>
+    </AuthScreen>
   );
 }

@@ -8,7 +8,22 @@ import { Button, Card, Chip, Row, Stepper, Text, TextField } from '@/shared/ui';
 import { WizardFrame } from '@/widgets/provider/wizard-frame';
 import type { StepProps } from './step-props';
 
-export const LANGUAGE_OPTIONS = ['Malayalam', 'English', 'Tamil', 'Hindi', 'Kannada', 'Other'] as const;
+/** Language codes; labels come from `common:languages.<code>`. */
+export const LANGUAGE_OPTIONS = ['ml', 'en', 'ta', 'hi', 'kn', 'other'] as const;
+const LEGACY_LANGUAGE_NAMES: Record<string, string> = {
+  malayalam: 'ml',
+  english: 'en',
+  tamil: 'ta',
+  hindi: 'hi',
+  kannada: 'kn',
+};
+
+/** Saved languages as codes; older drafts stored English names. */
+function toLanguageCodes(languages: string[]): string[] {
+  const known = LANGUAGE_OPTIONS as readonly string[];
+  return [...new Set(languages.map((value) => LEGACY_LANGUAGE_NAMES[value.toLowerCase()] ?? (known.includes(value.toLowerCase()) ? value.toLowerCase() : 'other')))];
+}
+
 const KINDS: QualificationKind[] = ['qualification', 'training', 'certification', 'work_experience'];
 
 interface QualificationForm {
@@ -28,7 +43,7 @@ export function ExperienceStep({ application, isEditable, returnTo }: StepProps)
   const [years, setYears] = useState(draft?.yearsExperience ?? 0);
   const [bio, setBio] = useState(draft?.bio ?? '');
   const [previousWork, setPreviousWork] = useState(draft?.previousWork ?? '');
-  const [languages, setLanguages] = useState<string[]>(draft?.languages ?? []);
+  const [languages, setLanguages] = useState<string[]>(() => toLanguageCodes(draft?.languages ?? []));
   const [qualifications, setQualifications] = useState<QualificationForm[]>(
     (draft?.qualifications ?? []).map((item, index) => ({
       id: index,
@@ -67,7 +82,14 @@ export function ExperienceStep({ application, isEditable, returnTo }: StepProps)
         year: item.year ? Number(item.year) : null,
       })),
     };
-    const next = validateExperience(data);
+    const byIndex = validateExperience(data);
+    // Qualification errors are keyed by row id so they stay on the right row after a removal.
+    const next: FieldErrors = {};
+    for (const [key, value] of Object.entries(byIndex)) {
+      const match = /^qualifications\.(\d+)\.(.+)$/.exec(key);
+      const row = match ? qualifications[Number(match[1])] : undefined;
+      next[match && row ? `qualifications.${row.id}.${match[2]}` : key] = value;
+    }
     setErrors(next);
     if (!hasErrors(next)) {
       save.mutate(data);
@@ -85,7 +107,7 @@ export function ExperienceStep({ application, isEditable, returnTo }: StepProps)
       isSaving={save.isPending}
       saveError={save.error}
       hasFieldErrors={hasErrors(errors)}>
-      <Stepper label={t('provider:experience.years')} value={years} onChange={setYears} min={0} max={60} />
+      <Stepper label={t('provider:experience.years')} value={years} onChange={(value) => isEditable && setYears(value)} min={0} max={60} />
       <TextField
         label={t('provider:experience.bio')}
         hint={t('provider:experience.bioHint')}
@@ -114,7 +136,7 @@ export function ExperienceStep({ application, isEditable, returnTo }: StepProps)
           {LANGUAGE_OPTIONS.map((language) => (
             <Chip
               key={language}
-              label={t(`provider:languages.${language}`)}
+              label={t(`common:languages.${language}`)}
               isSelected={languages.includes(language)}
               onPress={() => isEditable && toggleLanguage(language)}
             />
@@ -131,7 +153,7 @@ export function ExperienceStep({ application, isEditable, returnTo }: StepProps)
       <Text variant="caption" tone="muted">
         {t('provider:experience.qualificationsHint')}
       </Text>
-      {qualifications.map((item, index) => (
+      {qualifications.map((item) => (
         <Card key={item.id}>
           <View style={styles.chips} accessibilityRole="radiogroup">
             {KINDS.map((kind) => (
@@ -149,7 +171,7 @@ export function ExperienceStep({ application, isEditable, returnTo }: StepProps)
             onChangeText={(title) => updateQualification(item.id, { title })}
             maxLength={120}
             editable={isEditable}
-            error={error(`qualifications.${index}.title`)}
+            error={error(`qualifications.${item.id}.title`)}
           />
           <TextField
             label={t('provider:experience.issuer')}
@@ -165,7 +187,7 @@ export function ExperienceStep({ application, isEditable, returnTo }: StepProps)
             keyboardType="number-pad"
             maxLength={4}
             editable={isEditable}
-            error={error(`qualifications.${index}.year`)}
+            error={error(`qualifications.${item.id}.year`)}
           />
           {isEditable ? (
             <Row style={styles.end}>
@@ -173,7 +195,12 @@ export function ExperienceStep({ application, isEditable, returnTo }: StepProps)
                 label={t('common:actions.remove')}
                 variant="ghost"
                 icon="trash-outline"
-                onPress={() => setQualifications((current) => current.filter((entry) => entry.id !== item.id))}
+                onPress={() => {
+                  setQualifications((current) => current.filter((entry) => entry.id !== item.id));
+                  setErrors((current) =>
+                    Object.fromEntries(Object.entries(current).filter(([key]) => !key.startsWith(`qualifications.${item.id}.`))),
+                  );
+                }}
                 accessibilityHint={item.title || t('provider:experience.qualificationTitle')}
               />
             </Row>

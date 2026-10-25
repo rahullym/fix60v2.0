@@ -7,19 +7,24 @@
     "requests": "Requests",
     "bookings": "Bookings",
     "saved": "Saved",
-    "account": "Account"
+    "account": "Profile",
+    "quick": "New request",
+    "savedProviders": "Saved providers"
   },
   "home": {
     "greeting": "Hello, {{name}}",
     "greetingNoName": "Hello",
     "setArea": "Set your area",
     "areaA11y": "Your area: {{area}}. Tap to change.",
-    "searchPlaceholder": "What help do you need?",
-    "categories": "Services",
+    "searchPlaceholder": "How can I help you today?",
+    "categories": "Our Services",
     "activeRequests": "Active requests",
     "upcomingBooking": "Upcoming booking",
     "activeBooking": "Happening now",
-    "footerNote": "Fix60 connects you with verified home-help providers in Kerala."
+    "footerNote": "Fix60 connects you with verified home-help providers in Kerala.",
+    "yourArea": "Your area",
+    "viewMore": "View more",
+    "categoriesHint": "Choose what you need help with"
   },
   "safety": {
     "title": "Your safety comes first",
@@ -256,7 +261,10 @@
   "confirm": {
     "title": "Book {{name}}?",
     "body": "This confirms your booking. Your phone number and address note will be shared with this provider, and the other requests will be closed.",
-    "action": "Confirm booking"
+    "action": "Confirm booking",
+    "successTitle": "Booking confirmed!",
+    "successBody": "{{name}} is booked. You can now call or WhatsApp them.",
+    "successAction": "View booking"
   },
   "cancel": {
     "reasonLabel": "Reason",

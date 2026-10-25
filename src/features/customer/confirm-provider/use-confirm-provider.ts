@@ -3,6 +3,7 @@ import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Alert } from 'react-native';
 import { hasErrorCode } from '@/shared/api/api-error';
+import { successFlash } from '@/features/success/success-flash';
 import { api } from '@/shared/api/endpoints';
 import { invalidateRoots } from '../model/query-keys';
 
@@ -21,6 +22,11 @@ export function useConfirmProvider(requestCode: string): ConfirmProvider {
     onSuccess: async (booking) => {
       await invalidateRoots(client, ['requests', 'request', 'bookings', 'booking', 'provider-profile']);
       router.replace({ pathname: '/customer/bookings/[code]', params: { code: booking.code } });
+      successFlash.show({
+        title: t('customer:confirm.successTitle'),
+        body: t('customer:confirm.successBody', { name: booking.counterparty.displayName }),
+        actionLabel: t('customer:confirm.successAction'),
+      });
     },
     onError: async (error) => {
       if (hasErrorCode(error, 'SLOT_UNAVAILABLE', 'INVALID_STATE_TRANSITION')) {

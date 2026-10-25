@@ -27,7 +27,11 @@ export function RequestSummaryCard({
   const hasAccepted = isChoosing && request.acceptedCount > 0;
 
   return (
-    <Card onPress={onPress} accessibilityLabel={`${service}, ${t(`common:requestStatus.${request.status}`)}`} style={isCompact ? styles.compact : undefined}>
+    <Card
+      onPress={onPress}
+      accentColor={request.acceptedCount > 0 ? theme.colors.accent : undefined}
+      accessibilityLabel={`${service}, ${t(`common:requestStatus.${request.status}`)}`}
+      style={isCompact ? styles.compact : undefined}>
       <Row style={styles.between}>
         <View style={styles.flex}>
           <Text variant="bodyStrong" numberOfLines={isCompact ? 1 : 2}>

@@ -29,7 +29,9 @@
     "unblock": "Unblock",
     "send": "Send",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "decrease": "Decrease {{label}}",
+    "increase": "Increase {{label}}"
   },
   "error": {
     "title": "Something went wrong"
@@ -328,5 +330,13 @@
     "days_ago_other": "{{count}} days ago",
     "days_in_one": "tomorrow",
     "days_in_other": "in {{count}} days"
+  },
+  "languages": {
+    "ml": "Malayalam",
+    "en": "English",
+    "ta": "Tamil",
+    "hi": "Hindi",
+    "kn": "Kannada",
+    "other": "Other"
   }
 }

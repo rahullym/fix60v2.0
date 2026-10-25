@@ -3,7 +3,8 @@ import { StyleSheet, View } from 'react-native';
 import type { ServiceSummary } from '@/shared/api/types';
 import { useLocale } from '@/shared/lib/use-locale';
 import { useTheme } from '@/shared/theme/theme';
-import { Card, Icon, Row, Text } from '@/shared/ui';
+import { gradientFor } from '@/shared/theme/palette';
+import { Card, GradientIcon, Icon, Row, Text } from '@/shared/ui';
 import { serviceIcon } from './service-icon';
 
 /** Tappable service with icon, name and short description. */
@@ -15,9 +16,7 @@ export function ServiceRow({ service, onPress }: { service: ServiceSummary; onPr
   return (
     <Card onPress={onPress} accessibilityLabel={name}>
       <Row gap={12}>
-        <View style={[styles.bubble, { backgroundColor: theme.colors.primarySoft }]}>
-          <Icon name={serviceIcon(service.slug)} size={22} color={theme.colors.primaryMid} />
-        </View>
+        <GradientIcon icon={serviceIcon(service.slug)} colors={gradientFor(service.categoryId)} size={46} />
         <View style={styles.flex}>
           <Text variant="bodyStrong" numberOfLines={2}>
             {name}
@@ -36,5 +35,4 @@ export function ServiceRow({ service, onPress }: { service: ServiceSummary; onPr
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  bubble: { width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center' },
 });

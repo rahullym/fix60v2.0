@@ -1,4 +1,5 @@
 import { Stack } from 'expo-router';
+import { blueStackHeader } from '@/shared/ui/stack-header';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useProviderMe } from '@/features/provider/model/queries';
@@ -29,10 +30,7 @@ export default function ProviderLayout(): ReactNode {
   return (
     <Stack
       screenOptions={{
-        headerShadowVisible: false,
-        headerBackButtonDisplayMode: 'minimal',
-        headerTintColor: theme.colors.text,
-        headerStyle: { backgroundColor: theme.colors.background },
+        ...blueStackHeader,
         contentStyle: { backgroundColor: theme.colors.background },
       }}>
       <Stack.Protected guard={isActive} redirectTo="/provider/application">

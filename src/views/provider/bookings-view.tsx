@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { providerKeys } from '@/features/provider/model/queries';
 import { api } from '@/shared/api/endpoints';
 import type { BookingScope } from '@/shared/api/types';
-import { Chip, EmptyState, ErrorState, LoadingState, Screen } from '@/shared/ui';
+import { EmptyState, ErrorState, LoadingState, Screen, TopTabs } from '@/shared/ui';
 import { BookingCard } from '@/widgets/provider/booking-card';
 
 const SCOPES: BookingScope[] = ['upcoming', 'active', 'past'];
@@ -22,12 +22,13 @@ export function BookingsView(): ReactNode {
   const items = bookings.data?.items ?? [];
 
   return (
-    <Screen onRefresh={() => void bookings.refetch()} isRefreshing={bookings.isRefetching}>
-      <View style={styles.segments} accessibilityRole="tablist">
-        {SCOPES.map((value) => (
-          <Chip key={value} label={t(`provider:bookings.scope.${value}`)} isSelected={scope === value} onPress={() => setScope(value)} />
-        ))}
-      </View>
+    <View style={styles.flex}>
+      <TopTabs
+        value={scope}
+        tabs={SCOPES.map((value) => ({ value, label: t(`provider:bookings.scope.${value}`) }))}
+        onChange={setScope}
+      />
+      <Screen onRefresh={() => void bookings.refetch()} isRefreshing={bookings.isRefetching}>
       {bookings.isLoading ? <LoadingState /> : null}
       {bookings.error ? <ErrorState error={bookings.error} onRetry={() => void bookings.refetch()} /> : null}
       {!bookings.isLoading && !bookings.error && items.length === 0 ? (
@@ -36,10 +37,11 @@ export function BookingsView(): ReactNode {
       {items.map((booking) => (
         <BookingCard key={booking.code} booking={booking} onPress={() => router.push(`/provider/bookings/${booking.code}`)} />
       ))}
-    </Screen>
+      </Screen>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  segments: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  flex: { flex: 1 },
 });

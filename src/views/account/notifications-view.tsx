@@ -40,7 +40,7 @@ export function NotificationsView(): ReactNode {
                   onPress={() => markAll.mutate()}
                   hitSlop={8}
                   style={styles.headerAction}>
-                  <Text variant="label" tone="primary">
+                  <Text variant="label" tone="onPrimary">
                     {t('common:notifications.markAllRead')}
                   </Text>
                 </Pressable>

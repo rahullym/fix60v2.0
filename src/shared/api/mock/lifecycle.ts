@@ -10,6 +10,7 @@ import {
   type MockRequest,
 } from './db';
 import type { LatLng } from './geo';
+import { toLanguageCode, toLanguageCodes } from './languages';
 import { rankCandidates } from './ranking';
 import { mockError } from './router';
 import { slotsOverlap } from './slots';
@@ -99,11 +100,13 @@ export function hasExceptionConflict(provider: MockProvider, startsAt: string, e
   return provider.availability.exceptions.some((exception) => slotsOverlap(exception.startsAt, exception.endsAt, startsAt, endsAt));
 }
 
-const LANGUAGE_ALIASES: Record<string, string> = { ml: 'malayalam', en: 'english', ta: 'tamil', hi: 'hindi' };
-
+/** Matches a language code (or a legacy name such as "Malayalam") against the provider's codes. */
 function matchesLanguage(provider: MockProvider, language: string): boolean {
-  const wanted = (LANGUAGE_ALIASES[language.toLowerCase()] ?? language).toLowerCase();
-  return provider.languages.some((spoken) => spoken.toLowerCase() === wanted);
+  const wanted = toLanguageCode(language);
+  if (!wanted) {
+    return false;
+  }
+  return provider.languages.some((spoken) => toLanguageCode(spoken) === wanted);
 }
 
 export interface EligibilityQuery {
@@ -321,7 +324,7 @@ export function syncProviderFromDraft(provider: MockProvider, draft: Application
     provider.yearsExperience = draft.experience.yearsExperience;
     provider.bio = draft.experience.bio;
     provider.previousWork = draft.experience.previousWork;
-    provider.languages = draft.experience.languages;
+    provider.languages = toLanguageCodes(draft.experience.languages);
     provider.qualifications = draft.experience.qualifications;
   }
   if (draft.service_area) {

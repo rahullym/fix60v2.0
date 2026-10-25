@@ -49,7 +49,9 @@ export function PublicProfilePreview({ profile }: { profile: ProviderPublicProfi
         </Text>
       )}
       {profile.languages.length > 0 ? (
-        <Text variant="caption">{t('provider:profile.languages', { list: profile.languages.join(', ') })}</Text>
+        <Text variant="caption">{t('provider:profile.languages', {
+            list: profile.languages.map((language) => t(`common:languages.${language}`, { defaultValue: language })).join(', '),
+          })}</Text>
       ) : null}
       {profile.bio ? <Text>{profile.bio}</Text> : null}
       {profile.services.map((item) => (

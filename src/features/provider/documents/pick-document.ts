@@ -1,4 +1,5 @@
 import * as DocumentPicker from 'expo-document-picker';
+import { File } from 'expo-file-system';
 import * as ImagePicker from 'expo-image-picker';
 import {
   type AllowedDocumentMimeType,
@@ -28,10 +29,24 @@ const IMAGE_OPTIONS: ImagePicker.ImagePickerOptions = {
   exif: false,
 };
 
-function check(uri: string, mime: string | null, size: number | undefined, name: string | null | undefined): PickResult {
+/** Picker size, or the size read from disk when the picker did not report one. */
+function resolveSize(uri: string, size: number | null | undefined): number | undefined {
+  if (typeof size === 'number' && size > 0) {
+    return size;
+  }
+  try {
+    const diskSize = new File(uri).size;
+    return typeof diskSize === 'number' && diskSize > 0 ? diskSize : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function check(uri: string, mime: string | null, pickerSize: number | null | undefined, name: string | null | undefined): PickResult {
   if (!isAllowedMimeType(mime)) {
     return { ok: false, reason: 'badType' };
   }
+  const size = resolveSize(uri, pickerSize);
   if (size === undefined || size <= 0) {
     return { ok: false, reason: 'unreadable' };
   }

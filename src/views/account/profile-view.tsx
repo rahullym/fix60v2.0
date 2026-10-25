@@ -112,7 +112,7 @@ function ProfileForm({ me }: { me: Me }): ReactNode {
         label={t('common:profile.whatsapp')}
         value={whatsapp}
         onChangeText={(value) => setWhatsapp(value.replace(/\D/g, ''))}
-        prefix="+91"
+        prefix="🇮🇳 +91"
         keyboardType="phone-pad"
         maxLength={10}
         hint={t('common:profile.whatsappHint')}

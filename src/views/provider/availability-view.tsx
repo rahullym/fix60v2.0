@@ -117,6 +117,7 @@ export function AvailabilityView(): ReactNode {
   const { t } = useTranslation();
   const availability = useQuery({ queryKey: providerKeys.availability, queryFn: api.provider.availability });
   const [isAdding, setIsAdding] = useState(false);
+  const [formVersion, setFormVersion] = useState(0);
 
   if (availability.isLoading) {
     return <LoadingState />;
@@ -131,8 +132,10 @@ export function AvailabilityView(): ReactNode {
   const exceptions = availability.data.exceptions;
 
   return (
-    <Screen onRefresh={() => void availability.refetch()} isRefreshing={availability.isRefetching}>
-      <WeeklyForm availability={availability.data} />
+    <Screen
+      onRefresh={() => void availability.refetch().then(() => setFormVersion((version) => version + 1))}
+      isRefreshing={availability.isRefetching}>
+      <WeeklyForm key={formVersion} availability={availability.data} />
       <SectionHeader title={t('provider:timeOff.title')} />
       <Text variant="caption" tone="muted">
         {t('provider:timeOff.hint')}

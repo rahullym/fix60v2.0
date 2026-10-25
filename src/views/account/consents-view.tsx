@@ -56,12 +56,15 @@ export function ConsentsView(): ReactNode {
       <Text variant="caption" tone="muted">
         {t('common:consents.requiredBody')}
       </Text>
-      {REQUIRED_CONSENTS.filter(({ type }) => type !== 'provider_declaration' || byType.has(type)).map(({ type, policySlug }) => {
+      {REQUIRED_CONSENTS.filter(({ type }) => type !== 'provider_declaration' || byType.get(type)?.isGranted === true).map(({ type, policySlug }) => {
         const item = byType.get(type);
         return (
           <Card key={type}>
             <Row gap={10}>
-              <Icon name="checkmark-circle" color={theme.colors.success} />
+              <Icon
+                name={item?.isGranted === false ? 'ellipse-outline' : 'checkmark-circle'}
+                color={item?.isGranted === false ? theme.colors.textMuted : theme.colors.success}
+              />
               <Text variant="bodyStrong" style={{ flex: 1 }}>
                 {t(`common:consents.${type}`)}
               </Text>

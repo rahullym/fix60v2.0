@@ -22,6 +22,7 @@ function Fact({ icon, label }: { icon: 'location-outline' | 'calendar-outline' |
 
 /** Job invitation summary: service, area, slot, duration, budget, distance and the response countdown. */
 export function InvitationCard({ invitation, onPress }: { invitation: ProviderInvitation; onPress?: () => void }): ReactNode {
+  const theme = useTheme();
   const { t } = useTranslation();
   const { locale, pick } = useLocale();
   const { request } = invitation;
@@ -29,7 +30,10 @@ export function InvitationCard({ invitation, onPress }: { invitation: ProviderIn
   const serviceName = pick(request.service.name);
   const area = `${pick(request.localityName)}, ${pick(request.districtName)}`;
   return (
-    <Card onPress={onPress} accessibilityLabel={t('provider:invitation.cardA11y', { service: serviceName, area })}>
+    <Card
+      onPress={onPress}
+      accentColor={invitation.request.source === 'directed' ? theme.colors.accent : theme.colors.primary}
+      accessibilityLabel={t('provider:invitation.cardA11y', { service: serviceName, area })}>
       <Row style={{ justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <Text variant="heading" style={{ flex: 1 }}>
           {serviceName}

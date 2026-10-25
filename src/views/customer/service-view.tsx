@@ -2,13 +2,16 @@ import { useQuery } from '@tanstack/react-query';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { serviceIcon } from '@/entities/service/service-icon';
+import { gradientFor } from '@/shared/theme/palette';
 import { customerKeys } from '@/features/customer/model/query-keys';
 import { api } from '@/shared/api/endpoints';
 import { useLocale } from '@/shared/lib/use-locale';
 import { useTheme } from '@/shared/theme/theme';
-import { Button, Card, ErrorState, Icon, LoadingState, Row, Screen, SectionHeader, Text, type IconName } from '@/shared/ui';
+import { Button, Card, ErrorState, Icon, LoadingState, Row, Screen, SectionHeader, Text, type IconName, useLightStatusBar } from '@/shared/ui';
 
 const steps: { icon: IconName; key: string }[] = [
   { icon: 'create-outline', key: 'post' },
@@ -21,6 +24,8 @@ const steps: { icon: IconName; key: string }[] = [
 export function ServiceView(): ReactNode {
   const { t } = useTranslation();
   const theme = useTheme();
+  const { top } = useSafeAreaInsets();
+  useLightStatusBar();
   const { pick } = useLocale();
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const query = useQuery({ queryKey: customerKeys.service(slug), queryFn: () => api.catalog.service(slug) });
@@ -52,16 +57,34 @@ export function ServiceView(): ReactNode {
           />
         </View>
       }>
-      <Stack.Screen options={{ title: pick(service.name) }} />
-      <Row gap={14}>
-        <View style={[styles.bubble, { backgroundColor: theme.colors.primarySoft }]}>
-          <Icon name={serviceIcon(service.slug)} size={28} color={theme.colors.primaryMid} />
+      <Stack.Screen options={{ title: pick(service.name), headerShown: false }} />
+      <LinearGradient
+        colors={gradientFor(service.categoryId)}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={[styles.hero, { paddingTop: top + 12 }]}>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={t('common:actions.back')}
+          onPress={() => (router.canGoBack() ? router.back() : router.replace('/customer'))}
+          hitSlop={10}
+          style={styles.back}>
+          <Icon name="arrow-back" size={18} color={theme.colors.onPrimary} />
+        </Pressable>
+        <View style={styles.heroRow}>
+        <View style={styles.heroText}>
+          <Text variant="display" tone="onPrimary" style={styles.heroTitle}>
+            {pick(service.name)}
+          </Text>
+          {service.description ? (
+            <Text tone="onPrimary" style={styles.heroBody}>
+              {pick(service.description)}
+            </Text>
+          ) : null}
         </View>
-        <Text variant="title" style={styles.flex}>
-          {pick(service.name)}
-        </Text>
-      </Row>
-      {service.description ? <Text>{pick(service.description)}</Text> : null}
+        <Icon name={serviceIcon(service.slug)} size={84} color={theme.colors.onPrimary} />
+        </View>
+      </LinearGradient>
 
       <SectionHeader title={t('customer:service.whatToExpect')} />
       <Card>
@@ -105,7 +128,25 @@ export function ServiceView(): ReactNode {
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  bubble: { width: 56, height: 56, borderRadius: 28, alignItems: 'center', justifyContent: 'center' },
+  hero: {
+    marginHorizontal: -16,
+    marginTop: -16,
+    paddingHorizontal: 20,
+    paddingBottom: 32,
+    gap: 16,
+  },
+  heroRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  back: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(255,255,255,0.25)',
+  },
+  heroText: { flex: 1, gap: 8 },
+  heroTitle: { fontSize: 30, lineHeight: 38 },
+  heroBody: { opacity: 0.9 },
   step: { alignItems: 'flex-start', paddingVertical: 4 },
   ctas: { gap: 10 },
 });

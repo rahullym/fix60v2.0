@@ -62,6 +62,13 @@ export const authFlow = {
   },
 };
 
+/** Clears everything cached for the signed-out user (auth flow, Firebase phone session, query cache). */
+export function clearSignedOutState(): void {
+  authFlow.reset();
+  void phoneAuth.signOut().catch(() => undefined);
+  queryClient.clear();
+}
+
 /** Revokes the refresh token (best effort), clears local state and returns to welcome. */
 export async function signOut(): Promise<void> {
   const refreshToken = session.getState().tokens?.refreshToken;

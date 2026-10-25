@@ -56,7 +56,7 @@ function openFromPush(data: PushData | undefined): void {
 
 /**
  * Registers this device for FCM while signed in and routes notification taps.
- * Runs only in `firebase` auth mode, where the native modules exist. Renders nothing.
+ * Runs only in `firebase` auth mode against the live API (a no-op in dev/mock). Renders nothing.
  */
 export function PushRegistration(): null {
   const { tokens, user } = useSession();
@@ -65,7 +65,7 @@ export function PushRegistration(): null {
   const userId = user?.id;
 
   useEffect(() => {
-    if (!isSignedIn || env.authMode !== 'firebase') {
+    if (!isSignedIn || env.authMode !== 'firebase' || env.apiMode === 'mock') {
       return undefined;
     }
     let isActive = true;

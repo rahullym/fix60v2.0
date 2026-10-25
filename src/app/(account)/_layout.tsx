@@ -2,7 +2,7 @@ import { Stack } from 'expo-router';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/shared/theme/theme';
-import { HeaderBackButton } from '@/widgets/account/header-back-button';
+import { blueStackHeader } from '@/shared/ui/stack-header';
 
 /** Signed-in screens shared by both roles (settings, notifications, support, report). */
 export default function AccountLayout(): ReactNode {
@@ -11,13 +11,8 @@ export default function AccountLayout(): ReactNode {
   return (
     <Stack
       screenOptions={{
-        headerShown: true,
-        headerShadowVisible: false,
-        headerBackButtonDisplayMode: 'minimal',
-        headerTintColor: theme.colors.text,
-        headerStyle: { backgroundColor: theme.colors.background },
+        ...blueStackHeader,
         contentStyle: { backgroundColor: theme.colors.background },
-        headerLeft: () => <HeaderBackButton tintColor={theme.colors.text} />,
       }}>
       <Stack.Screen name="settings/index" options={{ title: t('common:settings.title') }} />
       <Stack.Screen name="settings/profile" options={{ title: t('common:settings.profile') }} />

@@ -74,7 +74,7 @@ export function PersonalStep({ application, isEditable, returnTo }: StepProps): 
         initialDate={new Date(new Date().getFullYear() - 25, 0, 1)}
         value={dateOfBirth ? new Date(`${dateOfBirth}T00:00:00+05:30`) : null}
         displayValue={dateOfBirth ? formatDate(dateOfBirth, locale) : null}
-        onChange={(date) => setDateOfBirth(toIsoDate(date))}
+        onChange={(date) => (isEditable ? setDateOfBirth(toIsoDate(date)) : undefined)}
         maximumDate={new Date()}
         error={error('dateOfBirth')}
       />
@@ -91,7 +91,7 @@ export function PersonalStep({ application, isEditable, returnTo }: StepProps): 
               key={value}
               label={t(`provider:gender.${value}`)}
               isSelected={gender === value}
-              onPress={() => setGender(gender === value ? null : value)}
+              onPress={() => (isEditable ? setGender(gender === value ? null : value) : undefined)}
             />
           ))}
         </View>
@@ -99,7 +99,7 @@ export function PersonalStep({ application, isEditable, returnTo }: StepProps): 
       <TextField
         label={t('provider:personal.whatsappOptional')}
         hint={t('provider:personal.whatsappHint')}
-        prefix="+91"
+        prefix="🇮🇳 +91"
         value={whatsapp}
         onChangeText={(text) => setWhatsapp(text.replace(/\D/g, '').slice(0, 10))}
         keyboardType="phone-pad"
