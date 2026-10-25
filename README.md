@@ -38,6 +38,18 @@ EXPO_PUBLIC_AUTH_MODE=dev                  # backend AUTH_ALLOW_DEV_TOKENS=true
 3. Set `EXPO_PUBLIC_AUTH_MODE=firebase`.
 4. Make a dev build with `npx expo run:android` or `eas build --profile development`. Firebase native modules don't run in Expo Go.
 
+Without the Firebase files, `react-native.config.js` also leaves the Firebase native modules out of the build. Known issue for the Firebase build: `firebase-auth` 25 needs Kotlin 2.4, and the current React Native Gradle setup uses Kotlin 2.2, so set the Kotlin version (for example via `expo-build-properties`) before the first Firebase build.
+
+### Demo APK (test data, no backend)
+
+```sh
+npx expo prebuild --platform android --clean
+cd android && ./gradlew assembleRelease   # needs JDK 21 (Android Studio's bundled JBR works)
+# → android/app/build/outputs/apk/release/app-release.apk
+```
+
+`docs/client-demo.md` is the one-page guide to send with it. The release build is signed with the debug key, which is fine for sideloading but not for the Play Store.
+
 ## Docs
 
 - `docs/conventions.md` covers layers, routing, data, UI and i18n rules.
