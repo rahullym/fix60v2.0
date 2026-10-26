@@ -1,0 +1,342 @@
+{
+  "appName": "Fix60",
+  "tagline": "Trusted home help, near you",
+  "actions": {
+    "continue": "Continue",
+    "next": "Next",
+    "back": "Back",
+    "save": "Save",
+    "saveAndContinue": "Save and continue",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "done": "Done",
+    "close": "Close",
+    "retry": "Try again",
+    "edit": "Edit",
+    "delete": "Delete",
+    "remove": "Remove",
+    "select": "Select",
+    "search": "Search",
+    "pickDate": "Pick a date",
+    "pickTime": "Pick a time",
+    "call": "Call",
+    "whatsapp": "WhatsApp",
+    "viewAll": "View all",
+    "signOut": "Sign out",
+    "report": "Report",
+    "block": "Block",
+    "unblock": "Unblock",
+    "send": "Send",
+    "yes": "Yes",
+    "no": "No",
+    "decrease": "Decrease {{label}}",
+    "increase": "Increase {{label}}"
+  },
+  "error": {
+    "title": "Something went wrong"
+  },
+  "empty": {
+    "noMatches": "No matches"
+  },
+  "language": {
+    "title": "Language",
+    "en": "English",
+    "ml": "മലയാളം"
+  },
+  "weekdays": {
+    "0": "Sunday",
+    "1": "Monday",
+    "2": "Tuesday",
+    "3": "Wednesday",
+    "4": "Thursday",
+    "5": "Friday",
+    "6": "Saturday"
+  },
+  "weekdaysShort": {
+    "0": "Sun",
+    "1": "Mon",
+    "2": "Tue",
+    "3": "Wed",
+    "4": "Thu",
+    "5": "Fri",
+    "6": "Sat"
+  },
+  "units": {
+    "hours_one": "{{count}} hour",
+    "hours_other": "{{count}} hours",
+    "years_one": "{{count}} year",
+    "years_other": "{{count}} years",
+    "km": "{{value}} km"
+  },
+  "rates": {
+    "hourly": "{{amount}}/hr",
+    "daily": "{{amount}}/day",
+    "monthly": "{{amount}}/month",
+    "negotiable": "Negotiable"
+  },
+  "badges": {
+    "verified": "Verified",
+    "police_verified": "Police verified",
+    "experienced": "Experienced",
+    "top_rated": "Top rated"
+  },
+  "reportReasons": {
+    "harassment": "Harassment",
+    "unsafe_behaviour": "Unsafe behaviour",
+    "false_information": "False information",
+    "inappropriate_request": "Inappropriate request",
+    "payment_issue": "Payment issue",
+    "misconduct": "Misconduct",
+    "other": "Something else"
+  },
+  "settings": {
+    "title": "Settings",
+    "account": "Account",
+    "profile": "Profile",
+    "notifications": "Notifications",
+    "privacy": "Privacy & consents",
+    "blocked": "Blocked users",
+    "support": "Help & support",
+    "policies": "Policies",
+    "terms": "Terms of service",
+    "privacyPolicy": "Privacy policy",
+    "safetyPolicy": "Safety policy",
+    "deleteAccount": "Delete account",
+    "version": "Version {{version}}",
+    "role": {
+      "customer": "Customer",
+      "provider": "Service provider"
+    },
+    "editProfileA11y": "{{name}}, {{role}}. Edit profile",
+    "providerAgreement": "Provider agreement",
+    "signOutConfirmTitle": "Sign out?",
+    "signOutConfirmBody": "You'll need your mobile number and an OTP to sign in again.",
+    "signingOut": "Signing out…"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "You're all caught up",
+    "markAllRead": "Mark all read",
+    "unread": "Unread",
+    "unreadCount_one": "{{count}} unread",
+    "unreadCount_other": "{{count}} unread",
+    "emptyBody": "Updates about your requests, bookings and support will appear here.",
+    "loadMore": "Load older notifications"
+  },
+  "consents": {
+    "title": "Privacy & consents",
+    "service_communications": "Service updates by SMS and push",
+    "service_communicationsHint": "Booking confirmations, reminders and changes.",
+    "whatsapp_updates": "Updates on WhatsApp",
+    "whatsapp_updatesHint": "Get booking updates on WhatsApp.",
+    "marketing": "Offers and news",
+    "marketingHint": "Occasional offers. You can turn this off any time.",
+    "saved": "Preferences saved",
+    "intro": "You control how Fix60 contacts you. Changes apply right away and are recorded with the date and policy version.",
+    "optionalTitle": "Your choices",
+    "requiredTitle": "Required to use Fix60",
+    "requiredBody": "You accepted these when you signed up. They are needed to provide the service.",
+    "required": "Required",
+    "recorded": "Version {{version}} · updated {{date}}",
+    "readPolicy": "Read the policy",
+    "withdrawNote": "To withdraw a required consent, delete your account from Settings.",
+    "terms": "Terms of service",
+    "privacy": "Privacy policy",
+    "safety_policy": "Safety policy",
+    "provider_declaration": "Provider declaration and agreement"
+  },
+  "deletion": {
+    "title": "Delete account",
+    "body": "Your account will be deleted 7 days after you confirm. You can cancel during that time. Bookings and reports are kept without your personal details.",
+    "confirm": "Delete my account",
+    "scheduled": "Deletion scheduled for {{date}}",
+    "cancel": "Keep my account",
+    "scheduledBody": "You can keep using Fix60 until then. Choose “Keep my account” to cancel the deletion.",
+    "signOutHint": "If you sign out now, sign in again before the date above to cancel.",
+    "confirmWord": "DELETE",
+    "typeToConfirm": "Type {{word}} to confirm",
+    "finalTitle": "Delete your account?",
+    "finalBody": "Your account will be deleted after 7 days. You can cancel any time before then.",
+    "kept": "Deletion cancelled. Your account is safe.",
+    "pointProfile": "Your profile, contact details and preferences are removed.",
+    "pointBookings": "Past bookings, payments and safety reports are kept without your personal details, as required by law.",
+    "pointGrace": "You have 7 days to change your mind.",
+    "pointSignIn": "Active bookings should be completed or cancelled first."
+  },
+  "support": {
+    "title": "Help & support",
+    "newTicket": "New request",
+    "subject": "Subject",
+    "message": "Message",
+    "empty": "No support requests yet",
+    "status": {
+      "open": "Open",
+      "awaiting_user": "Awaiting your reply",
+      "resolved": "Resolved"
+    },
+    "reply": "Write a reply",
+    "fromSupport": "Fix60 support",
+    "callUs": "Call support",
+    "whatsappUs": "WhatsApp support",
+    "you": "You",
+    "contactTitle": "Contact us",
+    "contactBody": "We usually reply within a few hours, 9 am – 7 pm.",
+    "noContacts": "Contact details are not available right now. Create a request below.",
+    "emailUs": "Email support",
+    "grievanceOfficer": "Grievance officer: {{name}} {{email}}",
+    "myTickets": "Your requests",
+    "emptyBody": "Create a request and our team will reply here.",
+    "faqTitle": "Frequently asked questions",
+    "noFaqs": "No questions yet.",
+    "newTicketIntro": "Tell us what happened. Our team will reply in this app.",
+    "aboutBooking": "About booking {{code}}",
+    "resolvedNote": "This request is resolved. Reply if you still need help.",
+    "ticketTitle": "Support request",
+    "errors": {
+      "subject": "Enter a short subject.",
+      "message": "Describe the problem in at least 10 characters."
+    }
+  },
+  "report": {
+    "title": "Report a problem",
+    "reason": "What happened?",
+    "details": "Tell us more (optional)",
+    "submitted": "Report {{code}} submitted. Our safety team will review it.",
+    "blockToo": "Also block this person",
+    "emergencyTitle": "In danger right now?",
+    "emergency": "Leave the place if you can and call {{number}} (emergency services). Then tell us.",
+    "callEmergency": "Call {{number}}",
+    "thisPerson": "this person",
+    "missingSubject": "We couldn't tell who you want to report. Contact support instead.",
+    "reasonRequired": "Choose what happened.",
+    "about": "Reporting {{name}}",
+    "submit": "Submit report",
+    "detailsHint": "What happened, when and where. Don't include passwords or bank details.",
+    "confidential": "Reports are confidential. The person you report is not told who reported them.",
+    "successTitle": "Thank you for telling us",
+    "blockFailed": "We couldn't block {{name}}. Try again from Blocked users or contact support.",
+    "nextTitle": "What happens next",
+    "next1": "Our safety team reviews every report, usually within 24 hours.",
+    "next2": "We may contact you for details and may suspend the account while we check.",
+    "next3": "Keep the report code above if you contact support."
+  },
+  "block": {
+    "confirmTitle": "Block {{name}}?",
+    "confirmBody": "You won't see each other in search or receive new requests from each other.",
+    "done": "{{name}} blocked",
+    "empty": "You haven't blocked anyone",
+    "unblockConfirmTitle": "Unblock {{name}}?",
+    "unblockConfirmBody": "You may see each other in search and receive requests from each other again.",
+    "emptyBody": "When you block someone, they appear here. You can unblock them at any time.",
+    "listIntro": "Blocked people can't see you in search or send you new requests.",
+    "blockedOn": "Blocked on {{date}}"
+  },
+  "requestStatus": {
+    "submitted": "Submitted",
+    "under_review": "Under review",
+    "matching": "Finding providers",
+    "provider_notified": "Providers notified",
+    "provider_accepted": "Provider accepted",
+    "provider_declined": "Provider declined",
+    "customer_confirmation_pending": "Choose your provider",
+    "booking_confirmed": "Booked",
+    "cancelled": "Cancelled",
+    "disputed": "Under dispute"
+  },
+  "bookingStatus": {
+    "confirmed": "Confirmed",
+    "service_started": "In progress",
+    "service_completed": "Completed",
+    "cancelled": "Cancelled",
+    "disputed": "Under dispute"
+  },
+  "invitationStatus": {
+    "invited": "New",
+    "viewed": "Seen",
+    "accepted": "Accepted",
+    "declined": "Declined",
+    "expired": "Expired",
+    "withdrawn": "Filled by someone else"
+  },
+  "applicationStatus": {
+    "draft": "In progress",
+    "submitted": "Submitted",
+    "under_review": "Under review",
+    "info_required": "More info needed",
+    "approved": "Approved",
+    "rejected": "Not approved"
+  },
+  "serviceStatus": {
+    "pending": "Pending review",
+    "approved": "Approved",
+    "rejected": "Not approved",
+    "suspended": "Suspended"
+  },
+  "documentStatus": {
+    "pending": "Awaiting review",
+    "verified": "Verified",
+    "rejected": "Rejected",
+    "info_required": "Re-upload needed"
+  },
+  "documentType": {
+    "id_proof": "Photo ID (Aadhaar, Voter ID, etc.)",
+    "address_proof": "Address proof",
+    "driving_licence": "Driving licence",
+    "police_clearance": "Police clearance certificate",
+    "qualification_certificate": "Qualification certificate",
+    "training_certificate": "Training certificate",
+    "reference_letter": "Reference letter",
+    "other": "Other document"
+  },
+  "loading": "Loading…",
+  "profile": {
+    "fullName": "Full name",
+    "phone": "Mobile number",
+    "phoneHint": "This is your sign-in number. To change it, contact support.",
+    "email": "Email (optional)",
+    "whatsapp": "WhatsApp number (optional)",
+    "whatsappHint": "Leave empty if it's the same as your mobile number.",
+    "gender": "Gender (optional)",
+    "optional": "Not set",
+    "clearGender": "Clear gender",
+    "district": "District",
+    "locality": "Area / locality",
+    "contactSupport": "Need to change your number? Contact support",
+    "saved": "Profile saved",
+    "errors": {
+      "fullName": "Enter your full name.",
+      "email": "Enter a valid email or leave it empty.",
+      "locality": "Choose your area, or clear the district."
+    }
+  },
+  "gender": {
+    "female": "Female",
+    "male": "Male",
+    "other": "Other",
+    "prefer_not_to_say": "Prefer not to say"
+  },
+  "relative": {
+    "now": "just now",
+    "minutes_ago_one": "{{count}} min ago",
+    "minutes_ago_other": "{{count}} min ago",
+    "minutes_in_one": "in {{count}} min",
+    "minutes_in_other": "in {{count}} min",
+    "hours_ago_one": "{{count}} hour ago",
+    "hours_ago_other": "{{count}} hours ago",
+    "hours_in_one": "in {{count}} hour",
+    "hours_in_other": "in {{count}} hours",
+    "days_ago_one": "yesterday",
+    "days_ago_other": "{{count}} days ago",
+    "days_in_one": "tomorrow",
+    "days_in_other": "in {{count}} days"
+  },
+  "languages": {
+    "ml": "Malayalam",
+    "en": "English",
+    "ta": "Tamil",
+    "hi": "Hindi",
+    "kn": "Kannada",
+    "other": "Other"
+  }
+}
