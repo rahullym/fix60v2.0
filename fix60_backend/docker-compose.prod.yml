@@ -1,0 +1,24 @@
+# Production API on the host. Postgres is external (managed, with PostGIS + btree_gist) via DATABASE_URL.
+# Secrets live in ./shared/.env on the host; CI never uploads them.
+services:
+  api:
+    image: fix60-api:latest
+    env_file: ./shared/.env
+    environment:
+      NODE_ENV: production
+      API_PORT: '4000'
+      TRUST_PROXY: 'true'
+    ports:
+      - '127.0.0.1:4000:4000'
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD-SHELL', 'wget -qO- http://127.0.0.1:4000/api/v1/health || exit 1']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    logging:
+      driver: json-file
+      options:
+        max-size: '20m'
+        max-file: '5'

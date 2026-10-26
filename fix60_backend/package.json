@@ -1,0 +1,33 @@
+{
+  "name": "fix60",
+  "private": true,
+  "packageManager": "pnpm@10.18.0",
+  "scripts": {
+    "dev": "turbo run dev --filter=@fix60/api --filter=@fix60/admin",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "db:generate": "pnpm --filter @fix60/db db:generate",
+    "db:migrate": "pnpm --filter @fix60/db db:migrate",
+    "db:seed": "pnpm --filter @fix60/db db:seed",
+    "prepare": "husky || true"
+  },
+  "devDependencies": {
+    "eslint": "^10.13.0",
+    "husky": "^9.1.7",
+    "prettier": "^3.9.10",
+    "turbo": "^2.11.10",
+    "typescript": "^5.9.3"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "bcrypt",
+      "esbuild",
+      "@nestjs/core",
+      "protobufjs"
+    ]
+  }
+}

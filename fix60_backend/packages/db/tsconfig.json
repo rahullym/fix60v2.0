@@ -1,0 +1,5 @@
+{
+  "extends": "@fix60/typescript-config/node-library.json",
+  "compilerOptions": { "outDir": "dist", "rootDir": "src" },
+  "include": ["src"]
+}

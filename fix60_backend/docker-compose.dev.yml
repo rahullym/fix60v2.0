@@ -1,0 +1,19 @@
+# Local development database only. Production uses an external managed Postgres via DATABASE_URL.
+services:
+  postgres:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_USER: fix60
+      POSTGRES_PASSWORD: fix60
+      POSTGRES_DB: fix60
+    ports:
+      - '127.0.0.1:5446:5432'
+    volumes:
+      - fix60-dev-pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -h 127.0.0.1 -U fix60 -d fix60']
+      interval: 2s
+      retries: 30
+
+volumes:
+  fix60-dev-pg:
